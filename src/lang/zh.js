@@ -1,5 +1,13 @@
 export default {
   route: {
+    sysManagerTitle: '系统管理',
+    userManager: '用户管理',
+    userAdd: '用户添加',
+    userModify: '用户修改',
+    officeManagerTitle: '部门管理',
+    roleManagerTitle: '角色管理',
+    dictManagerTitle: '字典管理',
+    menuManagerTitle: '菜单管理',
     dashboard: '首页',
     introduction: '简述',
     documentation: '文档',

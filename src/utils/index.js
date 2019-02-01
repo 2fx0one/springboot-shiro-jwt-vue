@@ -1,6 +1,42 @@
 /**
  * Created by jiachenpan on 16/11/18.
  */
+export function listToTree(list, expendLevel = 0) {
+  const index = {}
+  const roots = []
+  // let node;
+  for (let i = 0; i < list.length; i += 1) {
+    index[list[i].id] = i // initialize the index
+    // list[i].children = [] // initialize the children
+  }
+  for (let i = 0; i < list.length; i += 1) {
+    const node = list[i]
+    if (node.parentId !== '0') {
+      // if you have dangling branches check that index[node.parentId] exists
+      const parent = list[index[node.parentId]]
+      parent.children = parent.children || []
+
+      // 子节点 深度为父节点 +1
+      node.depth = parent.depth + 1
+      parent.children.push(node)
+    } else {
+      // 父节点 深度为0
+      node.depth = 0
+      roots.push(node)
+    }
+  }
+
+  console.log(expendLevel)
+  if (expendLevel > 0) {
+    list.forEach(row => {
+      if (row.depth < expendLevel) {
+        row._expanded = true
+      }
+    })
+  }
+
+  return roots
+}
 
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {

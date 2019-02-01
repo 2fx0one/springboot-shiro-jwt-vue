@@ -112,6 +112,61 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
+    path: '/sysManager',
+    component: Layout,
+    name: 'sysManager',
+    meta: {
+      title: 'sysManagerTitle',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'user',
+        component: () => import('@/views/sys/user/UserManager'),
+        name: 'userManager',
+        meta: { title: 'userManager', icon: 'example', noCache: true }
+      },
+      {
+        path: 'AddUser',
+        component: () => import('@/views/sys/user/AddUser'),
+        name: 'addUser',
+        meta: { title: 'userAdd', icon: 'example', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'ModifyUser',
+        component: () => import('@/views/sys/user/AddUser'),
+        name: 'modifyUser',
+        meta: { title: 'userModify', icon: 'example', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'office',
+        component: () => import('@/views/sys/office/OfficeManager'),
+        name: 'officeManager',
+        meta: { title: 'officeManagerTitle', icon: 'example', noCache: true }
+      },
+      {
+        path: 'role',
+        component: () => import('@/views/sys/role/RoleManager'),
+        name: 'roleManager',
+        meta: { title: 'roleManagerTitle', icon: 'example', noCache: true }
+      },
+      {
+        path: 'dict',
+        component: () => import('@/views/sys/dict/DictManager'),
+        name: 'dictManager',
+        meta: { title: 'dictManagerTitle', icon: 'example', noCache: true }
+      },
+      {
+        path: 'menu',
+        component: () => import('@/views/sys/menu/MenuManager'),
+        name: 'menuManager',
+        meta: { title: 'menuManagerTitle', icon: 'example', noCache: true }
+      }
+    ]
+  },
+  {
     path: '/permission',
     component: Layout,
     redirect: '/permission/index',
