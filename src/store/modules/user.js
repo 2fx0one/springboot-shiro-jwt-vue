@@ -11,6 +11,8 @@ const user = {
     avatar: '',
     introduction: '',
     roles: [],
+    menuList: [],
+    permissionList: [],
     setting: {
       articlePlatform: []
     }
@@ -40,18 +42,26 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
-    }
+    },
+    SET_MENU_LIST: (state, menuList) => {
+      state.menuList = menuList
+    },
+    SET_PERMISSION_LIST: (state, permissionList) => {
+      state.permissionList = permissionList
+    },
   },
 
   actions: {
     // 用户名登录
     LoginByUsername({ commit }, userInfo) {
       const username = userInfo.username.trim()
+      const password = userInfo.password.trim()
       return new Promise((resolve, reject) => {
-        loginByUsername(username, userInfo.password).then(response => {
-          const data = response.data
-          commit('SET_TOKEN', data)
-          setToken(response.data)
+        loginByUsername({ username, password }).then(response => {
+          console.log(response)
+          const token = response.data
+          commit('SET_TOKEN', token)
+          setToken(token)
           resolve()
         }).catch(error => {
           reject(error)
@@ -78,6 +88,12 @@ const user = {
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
+
+
+          commit('SET_MENU_LIST', data.menuList)
+          commit('SET_PERMISSION_LIST', data.permissionList)
+
+
           resolve(response)
         }).catch(error => {
           reject(error)

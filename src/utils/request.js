@@ -15,7 +15,7 @@ service.interceptors.request.use(
     // Do something before request is sent
     if (store.getters.token) {
       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-      config.headers['X-Token'] = getToken()
+      config.headers['Authorization'] = getToken()
     }
     return config
   },
@@ -28,7 +28,6 @@ service.interceptors.request.use(
 
 // response interceptor
 service.interceptors.response.use(
-  // response => response,
   /**
    * 下面的注释为通过在response里，自定义code来标示请求状态
    * 当code返回如下情况则说明权限有问题，登出并返回到登录页
@@ -37,7 +36,7 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    console.log('interceptors', res)
+    console.log('response->interceptors', res)
     if (res.code !== 20000) {
       Message({
         message: res.message,
