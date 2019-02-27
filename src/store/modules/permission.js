@@ -5,34 +5,33 @@ import { asyncRouterMap, constantRouterMap } from '@/router'
  * @param pathList
  * @param route
  */
-function hasPermission(pathList, route) {
-  if (route.path) {
-    return pathList.some(p => route.path.includes(p))
-  } else {
-    return true
-  }
-}
+// function hasPermission(pathList, route) {
+//   if (route.path) {
+//     return pathList.some(p => route.path.includes(p))
+//   } else {
+//     return true
+//   }
+// }
 
 /**
  * 递归过滤异步路由表，返回符合用户角色权限的路由表
  * @param routes asyncRouterMap
  * @param pathList
  */
-function filterAsyncRouter(routes, pathList) {
-  const res = []
-
-  routes.forEach(route => {
-    const tmp = { ...route }
-    if (hasPermission(pathList, tmp)) {
-      if (tmp.children) {
-        tmp.children = filterAsyncRouter(tmp.children, pathList)
-      }
-      res.push(tmp)
-    }
-  })
-
-  return res
-}
+// function filterAsyncRouter(routes, pathList) {
+//   const res = []
+//
+//   routes.forEach(route => {
+//     const tmp = { ...route }
+//     if (hasPermission(pathList, tmp)) {
+//       if (tmp.children) {
+//         tmp.children = filterAsyncRouter(tmp.children, pathList)
+//       }
+//       res.push(tmp)
+//     }
+//   })
+//   return res
+// }
 
 function filterChildren(children, pathList) {
   const accessChildren = children.filter(child => {
@@ -91,7 +90,8 @@ const permission = {
           //   return e.perm
           // }).filter(e => e)
           // console.log(asyncRouterMap)
-          accessedRouters = filterAsyncRouterWithPathTree(asyncRouterMap, pathList)
+          accessedRouters = filterAsyncRouterWithPathTree(asyncRouterMap, pathList.filter(e => e))
+          // accessedRouters = asyncRouterMap
         }
         commit('SET_ROUTERS', accessedRouters)
         resolve()

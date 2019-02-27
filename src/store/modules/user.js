@@ -11,7 +11,7 @@ const user = {
     avatar: '',
     introduction: '',
     roles: [],
-    menuList: [],
+    pathList: [],
     permissionList: [],
     setting: {
       articlePlatform: []
@@ -43,8 +43,8 @@ const user = {
     SET_ROLES: (state, roles) => {
       state.roles = roles
     },
-    SET_MENU_LIST: (state, menuList) => {
-      state.menuList = menuList
+    SET_PATH_LIST: (state, pathList) => {
+      state.pathList = pathList
     },
     SET_PERMISSION_LIST: (state, permissionList) => {
       state.permissionList = permissionList
@@ -79,17 +79,17 @@ const user = {
           }
           const data = response.data
 
+          commit('SET_NAME', data.name)
+          commit('SET_AVATAR', data.avatar)
+          commit('SET_INTRODUCTION', data.introduction)
+
           if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
             commit('SET_ROLES', data.roles)
           } else {
             reject('getInfo: roles must be a non-null array!')
           }
 
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
-
-          commit('SET_MENU_LIST', data.menuList)
+          commit('SET_PATH_LIST', data.pathList)
           commit('SET_PERMISSION_LIST', data.permissionList)
 
           resolve(response)
