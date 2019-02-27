@@ -112,7 +112,7 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
-    path: '/sysManager',
+    path: '/sys',
     component: Layout,
     name: 'sysManager',
     meta: {
@@ -121,20 +121,20 @@ export const asyncRouterMap = [
     },
     children: [
       {
-        path: 'user',
+        path: '/sys/user/index',
         component: () => import('@/views/sys/user/UserManager'),
         name: 'userManager',
         meta: { title: 'userManager', icon: 'example', noCache: true }
       },
       {
-        path: 'AddUser',
+        path: '/sys/user/info',
         component: () => import('@/views/sys/user/AddUser'),
         name: 'addUser',
         meta: { title: 'userAdd', icon: 'example', noCache: true },
-        hidden: true
+        // hidden: true
       },
       {
-        path: 'ModifyUser',
+        path: 'modifyUser',
         component: () => import('@/views/sys/user/AddUser'),
         name: 'modifyUser',
         meta: { title: 'userModify', icon: 'example', noCache: true },

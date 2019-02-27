@@ -8,6 +8,7 @@ export default {
     roleManagerTitle: '角色管理',
     dictManagerTitle: '字典管理',
     menuManagerTitle: '菜单管理',
+
     dashboard: '首页',
     introduction: '简述',
     documentation: '文档',

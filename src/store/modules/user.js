@@ -48,7 +48,7 @@ const user = {
     },
     SET_PERMISSION_LIST: (state, permissionList) => {
       state.permissionList = permissionList
-    },
+    }
   },
 
   actions: {
@@ -89,10 +89,8 @@ const user = {
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
 
-
           commit('SET_MENU_LIST', data.menuList)
           commit('SET_PERMISSION_LIST', data.permissionList)
-
 
           resolve(response)
         }).catch(error => {
