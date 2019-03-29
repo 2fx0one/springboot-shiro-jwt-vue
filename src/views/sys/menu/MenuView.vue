@@ -16,7 +16,7 @@ import treeTable from '@/components/TreeTable'
 // import { listToTree } from '@/utils'
 
 export default {
-  name: 'MenuManager',
+  name: 'MenuView',
   components: { treeTable },
   data() {
     return {

@@ -112,9 +112,9 @@ export default new Router({
 
 export const ComponentMap = {
   Layout: Layout,
-  menuView: () => import('@/views/sys/menu/MenuManager'),
-  menuAdd: () => import('@/views/sys/menu/MenuManager'),
-  menuModify: () => import('@/views/sys/menu/MenuManager')
+  menuView: () => import('@/views/sys/menu/MenuView'),
+  menuAdd: () => import('@/views/sys/menu/MenuView'),
+  menuModify: () => import('@/views/sys/menu/MenuView')
 }
 export const asyncRouterMap = [
   {
