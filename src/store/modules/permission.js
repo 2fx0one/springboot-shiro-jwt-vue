@@ -1,4 +1,5 @@
-import { asyncRouterMap, constantRouterMap } from '@/router'
+import { asyncRouterMap, ComponentMap, constantRouterMap } from '@/router'
+import { listToTree } from '@/utils'
 
 /**
  * 通过meta.role判断是否与当前用户权限匹配
@@ -33,36 +34,36 @@ import { asyncRouterMap, constantRouterMap } from '@/router'
 //   return res
 // }
 
-function filterChildren(children, pathList) {
-  const accessChildren = children.filter(child => {
-    const r = pathList.filter(path => path === child.path)
-    // console.log(r)
-    if (r.length !== 0) {
-      return true
-    } else {
-      return false
-    }
-  })
-  return accessChildren
-}
+// function filterChildren(children, pathList) {
+//   const accessChildren = children.filter(child => {
+//     const r = pathList.filter(path => path === child.path)
+//     // console.log(r)
+//     if (r.length !== 0) {
+//       return true
+//     } else {
+//       return false
+//     }
+//   })
+//   return accessChildren
+// }
 
-function filterAsyncRouterWithPathTree(asyncRouterMap, pathList) {
-  const accessedRouters = asyncRouterMap.filter(route => {
-    // 只过滤子节点 只有两级节点
-    // 如果子节点不为空 就表示该节点可用
-    // if (childrenHasPermissionOfPathList(pathList, route)) {
-    if (route.children && route.children.length) {
-      route.children = filterChildren(route.children, pathList)
-      if (route.children.length !== 0) {
-        return true
-      }
-    }
-    // }
-    return false
-  })
-
-  return accessedRouters
-}
+// function filterAsyncRouterWithPathTree(asyncRouterMap, pathList) {
+//   const accessedRouters = asyncRouterMap.filter(route => {
+//     // 只过滤二级子节点 只有两级节点
+//     // 如果子节点不为空 就表示该节点可用
+//     // if (childrenHasPermissionOfPathList(pathList, route)) {
+//     if (route.children && route.children.length) {
+//       route.children = filterChildren(route.children, pathList)
+//       if (route.children.length !== 0) {
+//         return true
+//       }
+//     }
+//     // }
+//     return false
+//   })
+//
+//   return accessedRouters
+// }
 
 const permission = {
   state: {
@@ -78,20 +79,21 @@ const permission = {
   actions: {
     GenerateRoutes({ commit }, data) {
       return new Promise(resolve => {
-        const { pathList } = data
-        // console.log(permissionList)
+        const { roleList, routerList } = data
+        console.log(roleList)
         let accessedRouters
-        if (pathList.includes('admin')) {
+        if (roleList.includes('admin')) {
           accessedRouters = asyncRouterMap
         } else {
-          console.log(pathList)
+          console.log(routerList)
           // accessedRouters = filterAsyncRouter(asyncRouterMap, pathList)
           // const pathList = permissionList.map(e => {
           //   return e.perm
           // }).filter(e => e)
           // console.log(asyncRouterMap)
-          accessedRouters = filterAsyncRouterWithPathTree(asyncRouterMap, pathList.filter(e => e))
-          // accessedRouters = asyncRouterMap
+          // accessedRouters = filterAsyncRouterWithPathTree(asyncRouterMap, pathList.filter(e => e))
+          routerList.forEach(e => { e.component = ComponentMap[e.component] })
+          accessedRouters = listToTree(routerList)
         }
         commit('SET_ROUTERS', accessedRouters)
         resolve()

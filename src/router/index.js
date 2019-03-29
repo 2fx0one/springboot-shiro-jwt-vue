@@ -110,6 +110,12 @@ export default new Router({
   routes: constantRouterMap
 })
 
+export const ComponentMap = {
+  Layout: Layout,
+  menuView: () => import('@/views/sys/menu/MenuManager'),
+  menuAdd: () => import('@/views/sys/menu/MenuManager'),
+  menuModify: () => import('@/views/sys/menu/MenuManager')
+}
 export const asyncRouterMap = [
   {
     path: '/sys',
@@ -120,26 +126,6 @@ export const asyncRouterMap = [
       icon: 'example'
     },
     children: [
-      {
-        path: '/sys/menu/view',
-        component: () => import('@/views/sys/menu/MenuManager'),
-        name: 'menuView',
-        meta: { title: 'menuManagerTitle', icon: 'example', noCache: true }
-      },
-      {
-        path: '/sys/menu/add',
-        component: () => import('@/views/sys/menu/MenuManager'),
-        name: 'menuAdd',
-        meta: { title: 'menuManagerTitle', icon: 'example', noCache: true },
-        hidden: true
-      },
-      {
-        path: '/sys/menu/modify',
-        component: () => import('@/views/sys/menu/MenuManager'),
-        name: 'menuModify',
-        meta: { title: 'menuManagerTitle', icon: 'example', noCache: true },
-        hidden: true
-      },
       {
         path: '/sys/user/view',
         component: () => import('@/views/sys/user/UserManager'),

@@ -1,7 +1,7 @@
 /**
  * Created by jiachenpan on 16/11/18.
  */
-export function listToTree(list, expendLevel = 0) {
+export function listToTree(list, sort = true) {
   const index = {}
   const roots = []
   // let node;
@@ -26,15 +26,16 @@ export function listToTree(list, expendLevel = 0) {
     }
   }
 
-  console.log(expendLevel)
-  if (expendLevel > 0) {
-    list.forEach(row => {
-      if (row.depth < expendLevel) {
-        row._expanded = true
+  // 会按照 sort 排序
+  if (sort) {
+    roots.forEach(e => {
+      if (e.children && e.children.length > 0) {
+        e.children.sort((a, b) => {
+          return a.sort - b.sort
+        })
       }
     })
   }
-
   return roots
 }
 
@@ -67,7 +68,9 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value]
+    }
     if (result.length > 0 && value < 10) {
       value = '0' + value
     }
@@ -170,11 +173,11 @@ export function param2Obj(url) {
   }
   return JSON.parse(
     '{"' +
-      decodeURIComponent(search)
-        .replace(/"/g, '\\"')
-        .replace(/&/g, '","')
-        .replace(/=/g, '":"') +
-      '"}'
+    decodeURIComponent(search)
+      .replace(/"/g, '\\"')
+      .replace(/&/g, '","')
+      .replace(/=/g, '":"') +
+    '"}'
   )
 }
 

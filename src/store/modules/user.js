@@ -11,7 +11,7 @@ const user = {
     avatar: '',
     introduction: '',
     roles: [],
-    pathList: [],
+    routerList: [],
     permissionList: [],
     setting: {
       articlePlatform: []
@@ -43,8 +43,8 @@ const user = {
     SET_ROLES: (state, roles) => {
       state.roles = roles
     },
-    SET_PATH_LIST: (state, pathList) => {
-      state.pathList = pathList
+    SET_ROUTER_LIST: (state, routerList) => {
+      state.routerList = routerList
     },
     SET_PERMISSION_LIST: (state, permissionList) => {
       state.permissionList = permissionList
@@ -59,7 +59,7 @@ const user = {
       return new Promise((resolve, reject) => {
         loginByUsername({ username, password }).then(response => {
           console.log(response)
-          const token = response.data
+          const token = response
           commit('SET_TOKEN', token)
           setToken(token)
           resolve()
@@ -74,22 +74,22 @@ const user = {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
           // 由于mockjs 不支持自定义状态码只能这样hack
-          if (!response.data) {
+          if (!response) {
             reject('Verification failed, please login again.')
           }
-          const data = response.data
+          const data = response
 
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
 
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
+          if (data.roleList && data.roleList.length > 0) { // 验证返回的roles是否是一个非空数组
+            commit('SET_ROLES', data.roleList)
           } else {
             reject('getInfo: roles must be a non-null array!')
           }
 
-          commit('SET_PATH_LIST', data.pathList)
+          commit('SET_ROUTER_LIST', data.routerList)
           commit('SET_PERMISSION_LIST', data.permissionList)
 
           resolve(response)

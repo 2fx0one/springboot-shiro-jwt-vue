@@ -12,8 +12,8 @@
 
 <script>
 import treeTable from '@/components/TreeTable'
-import { menuList } from '@/api/sys'
-import { listToTree } from '@/utils'
+// import { menuList } from '@/api/sys'
+// import { listToTree } from '@/utils'
 
 export default {
   name: 'MenuManager',
@@ -54,12 +54,12 @@ export default {
     }
   },
   created() {
-    menuList().then(res => {
-      const data = res.map(e => ({ id: e.id, parentId: e.parentId, name: e.name, href: e.href, permission: e.permission }))
-      const treeData = listToTree(data, 2)
-      console.log(treeData)
-      this.treeData = treeData
-    })
+    // menuList().then(res => {
+    //   const data = res.map(e => ({ id: e.id, parentId: e.parentId, name: e.name, href: e.href, permission: e.permission }))
+    //   const treeData = listToTree(data, 2)
+    //   console.log(treeData)
+    //   this.treeData = treeData
+    // })
   },
   methods: {
     handleMenu(row) {
