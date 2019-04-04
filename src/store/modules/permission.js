@@ -85,7 +85,6 @@ const permission = {
         if (roleList.includes('admin')) {
           accessedRouters = asyncRouterMap
         } else {
-          console.log(routerList)
           // accessedRouters = filterAsyncRouter(asyncRouterMap, pathList)
           // const pathList = permissionList.map(e => {
           //   return e.perm
@@ -93,7 +92,20 @@ const permission = {
           // console.log(asyncRouterMap)
           // accessedRouters = filterAsyncRouterWithPathTree(asyncRouterMap, pathList.filter(e => e))
           routerList.forEach(e => { e.component = ComponentMap[e.component] })
-          accessedRouters = listToTree(routerList)
+          const tree = listToTree(routerList)
+
+          const treeNameTrip = function(tree) {
+            tree.forEach(node => {
+              if (node.children && node.children.length > 1) {
+                node.name = null
+                treeNameTrip(node.children)
+              }
+            })
+          }
+
+          treeNameTrip(tree)
+          console.log(tree)
+          accessedRouters = tree
         }
         console.log(accessedRouters)
         commit('SET_ROUTERS', accessedRouters)
