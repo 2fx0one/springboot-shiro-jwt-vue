@@ -40,13 +40,11 @@ service.interceptors.response.use(
     const data = response.data
     return data
   },
-  error => {
+  error => { // 非200 status
     const response = error.response
     console.log('err', response) // for debug
     const status = response.status
     if (status === 50014) {
-      // 请自行在引入 MessageBox
-      // import { Message, MessageBox } from 'element-ui'
       MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
         confirmButtonText: '重新登录',
         cancelButtonText: '取消',

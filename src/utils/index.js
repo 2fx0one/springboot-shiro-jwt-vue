@@ -14,11 +14,13 @@ export function listToTree(list, sort = true) {
     if (node.parentId !== '0') {
       // if you have dangling branches check that index[node.parentId] exists
       const parent = list[index[node.parentId]]
-      parent.children = parent.children || []
+      if (parent) {
+        parent.children = parent.children || []
 
-      // 子节点 深度为父节点 +1
-      node.depth = parent.depth + 1
-      parent.children.push(node)
+        // 子节点 深度为父节点 +1
+        node.depth = parent.depth + 1
+        parent.children.push(node)
+      }
     } else {
       // 父节点 深度为0
       node.depth = 0
@@ -27,15 +29,15 @@ export function listToTree(list, sort = true) {
   }
 
   // 会按照 sort 排序
-  if (sort) {
-    roots.forEach(e => {
-      if (e.children && e.children.length > 0) {
-        e.children.sort((a, b) => {
-          return a.sort - b.sort
-        })
-      }
-    })
-  }
+  // if (sort) {
+  //   roots.forEach(e => {
+  //     if (e.children && e.children.length > 0) {
+  //       e.children.sort((a, b) => {
+  //         return a.sort - b.sort
+  //       })
+  //     }
+  //   })
+  // }
   return roots
 }
 

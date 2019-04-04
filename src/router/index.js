@@ -114,7 +114,10 @@ export const ComponentMap = {
   Layout: Layout,
   menuView: () => import('@/views/sys/menu/MenuView'),
   menuAdd: () => import('@/views/sys/menu/MenuView'),
-  menuModify: () => import('@/views/sys/menu/MenuView')
+  menuModify: () => import('@/views/sys/menu/MenuView'),
+  roleView: () => import('@/views/sys/menu/MenuView'),
+  roleAdd: () => import('@/views/sys/menu/MenuView'),
+  roleModify: () => import('@/views/sys/menu/MenuView')
 }
 export const asyncRouterMap = [
   {

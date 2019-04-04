@@ -95,6 +95,7 @@ const permission = {
           routerList.forEach(e => { e.component = ComponentMap[e.component] })
           accessedRouters = listToTree(routerList)
         }
+        console.log(accessedRouters)
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })
