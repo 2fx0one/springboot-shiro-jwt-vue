@@ -54,6 +54,7 @@ export default {
     }
   },
   created() {
+    console.log('create')
     // menuList().then(res => {
     //   const data = res.map(e => ({ id: e.id, parentId: e.parentId, name: e.name, href: e.href, permission: e.permission }))
     //   const treeData = listToTree(data, 2)
