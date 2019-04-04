@@ -188,7 +188,7 @@ export default {
     addMenu(row) {
       this.dialogFormVisible = true
       this.title = '增加'
-      this.$refs.formRef.resetFields()
+      // this.$refs.formRef.resetFields()
       this.fillFormData({
         id: null,
         parentId: row.id,
