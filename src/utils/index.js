@@ -29,15 +29,15 @@ export function listToTree(list, sort = true) {
   }
 
   // 会按照 sort 排序
-  // if (sort) {
-  //   roots.forEach(e => {
-  //     if (e.children && e.children.length > 0) {
-  //       e.children.sort((a, b) => {
-  //         return a.sort - b.sort
-  //       })
-  //     }
-  //   })
-  // }
+  if (sort) {
+    roots.forEach(e => {
+      if (e.children && e.children.length > 0) {
+        e.children.sort((a, b) => {
+          return a.sort - b.sort
+        })
+      }
+    })
+  }
   return roots
 }
 

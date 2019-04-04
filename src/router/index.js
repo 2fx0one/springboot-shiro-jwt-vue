@@ -112,7 +112,7 @@ export default new Router({
 
 export const ComponentMap = {
   Layout: Layout,
-  MenuPanel: () => import('@/views/sys/MenuPanel'),
+  CommonMenuPanel: () => import('@/views/sys/CommonMenuPanel'),
   menuView: () => import('@/views/sys/menu/MenuView'),
   menuAdd: () => import('@/views/sys/menu/MenuView'),
   menuModify: () => import('@/views/sys/menu/MenuView'),
