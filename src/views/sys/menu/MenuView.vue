@@ -10,7 +10,7 @@
       </el-table-column>
     </tree-table>
     <el-dialog :title="title" :visible.sync="dialogFormVisible" width="30%" center>
-      <el-form ref="formRules" :model="form" status-icon>
+      <el-form ref="formRef" :model="form" status-icon>
         <el-form-item
           :label-width="formLabelWidth"
           :rules="[
@@ -52,10 +52,10 @@
           :rules="[
             { required: true, message: '不能为空'},
           ]"
-          label="是否隐藏">
-          <el-input v-model="form.hidden" auto-complete="off"/>
-          <el-radio v-model="radio" label="1">备选项</el-radio>
-          <el-radio v-model="radio" label="2">备选项</el-radio>
+          label="隐藏菜单">
+          <!--<el-input v-model="form.hidden" auto-complete="off"/>-->
+          <el-radio v-model="form.hidden" label="0">显示</el-radio>
+          <el-radio v-model="form.hidden" label="1">隐藏</el-radio>
         </el-form-item>
         <el-form-item
           :label-width="formLabelWidth"
@@ -148,7 +148,7 @@ export default {
         hidden: '',
         component: '',
         permission: '',
-        sort: 0
+        sort: 1
       },
       title: '',
       dialogFormVisible: false
@@ -188,9 +188,11 @@ export default {
     addMenu(row) {
       this.dialogFormVisible = true
       this.title = '增加'
+      this.$refs.formRef.resetFields()
       this.fillFormData({
         id: null,
-        parentId: row.id
+        parentId: row.id,
+        hidden: '0'
       })
     },
     modifyMenu(row) {
@@ -199,7 +201,7 @@ export default {
       this.fillFormData(row)
     },
     submitAddOrModify(title) {
-      this.$refs.formRules.validate(vaild => {
+      this.$refs.formRef.validate(vaild => {
         if (vaild) {
           if (title === '增加') {
             sysMenuAdd(this.form).then(response => {
