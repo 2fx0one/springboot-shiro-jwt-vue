@@ -93,7 +93,7 @@
       </el-form>
       <el-tree
         ref="tree"
-        :data="treeData"
+        :data="menutreeData"
         :expand-on-click-node="false"
         :props="defaultProps"
         show-checkbox
@@ -111,7 +111,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="medium" @click="dialogVisible = false">取 消</el-button>
-        <el-button :loading="btnLoading" size="medium" type="primary" @click="submit(title)">确 定</el-button>
+        <el-button :loading="btnLoading" size="medium" type="primary" @click="submitAddOrModify(title)">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -119,14 +119,25 @@
 
 <script>
 
-import { sysRoleDelete, sysRoleAdd, sysRoleModify, sysRoleView } from '@/api/sys'
+import { sysRoleDelete, sysRoleAdd, sysRoleModify, sysRoleView, sysMenuView } from '@/api/sys'
+import { listToTree } from '@/utils'
 
 export default {
   name: 'RoleManagerVue',
   data() {
     return {
+      menutreeData: [],
+      defaultProps: {
+        id: 0,
+        parentId: 0,
+        label: 'name',
+        path: 'path',
+        children: 'children'
+      },
+
       tableData: [],
       dialogVisible: false,
+      title: '',
       form: {
         id: null
 
@@ -135,6 +146,12 @@ export default {
   },
   created() {
     this.list()
+    sysMenuView().then(res => {
+      res.forEach(e => { e.label = e.name })
+      const treeData = listToTree(res)
+      console.log(treeData)
+      this.menutreeData = treeData
+    })
   },
   methods: {
     list() {
@@ -143,9 +160,18 @@ export default {
       })
     },
     fillFormData(data) {
-
+      this.form.id = data.id
+      this.form.name = data.name
+      this.form.parentId = data.parentId
+      this.form.path = data.path
+      this.form.component = data.component
+      this.form.icon = data.icon
+      this.form.hidden = data.hidden
+      this.form.permission = data.permission
+      this.form.sort = data.sort
     },
     handleRoleAdd() {
+      this.title = '新增角色'
       this.dialogVisible = true
       this.fillFormData({
 
@@ -153,7 +179,13 @@ export default {
       // this.$message.info('click' + row.name)
     },
     handleRoleEdit(index, row) {
+      this.title = '修改角色'
       this.dialogVisible = true
+      this.fillFormData(row)
+    },
+    submitAddOrModify(title) {
+      console.log(title, this.form)
+      console.log(this.$refs.tree.getCheckedKeys(true))
     },
     handleRoleDelete(index, row) {
       // this.$message.info('click' + row.name)
