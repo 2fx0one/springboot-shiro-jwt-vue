@@ -41,7 +41,16 @@ service.interceptors.response.use(
     return data
   },
   error => { // 非200 status
+    console.log('error', error)
     const response = error.response
+    if (!response) {
+      Message({
+        message: error,
+        type: 'error',
+        duration: 5 * 1000
+      })
+      return
+    }
     console.log('err', response) // for debug
     const status = response.status
     if (status === 50014) {

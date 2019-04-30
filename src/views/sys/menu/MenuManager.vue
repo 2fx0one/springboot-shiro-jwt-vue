@@ -3,9 +3,9 @@
     <tree-table :data="treeData" :columns="columns" :expand-all="true" border>
       <el-table-column label="操作" width="300">
         <template slot-scope="scope">
-          <el-button type="primary" @click="addMenu(scope.row)">新增</el-button>
-          <el-button type="warning" @click="modifyMenu(scope.row)">修改</el-button>
-          <el-button type="danger" @click="removeMenu(scope.row)">删除</el-button>
+          <el-button size="mini" type="primary" @click="addMenu(scope.row)">新增</el-button>
+          <el-button size="mini" type="warning" @click="modifyMenu(scope.row)">修改</el-button>
+          <el-button size="mini" type="danger" @click="removeMenu(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </tree-table>
@@ -86,7 +86,6 @@
 import treeTable from '@/components/TreeTable'
 import { sysMenuAdd, sysMenuDelete, sysMenuModify, sysMenuView } from '@/api/sys'
 import { listToTree } from '@/utils'
-// import { listToTree } from '@/utils'
 
 export default {
   name: 'MenuView',
@@ -174,16 +173,16 @@ export default {
     //   })
     // },
     fillFormData(data) {
-      this.form = data
-      // this.form.id = data.id
-      // this.form.name = data.name
-      // this.form.parentId = data.parentId
-      // this.form.path = data.path
-      // this.form.component = data.component
-      // this.form.icon = data.icon
-      // this.form.hidden = data.hidden
-      // this.form.permission = data.permission
-      // this.form.sort = data.sort
+      // this.form = data
+      this.form.id = data.id
+      this.form.name = data.name
+      this.form.parentId = data.parentId
+      this.form.path = data.path
+      this.form.component = data.component
+      this.form.icon = data.icon
+      this.form.hidden = data.hidden
+      this.form.permission = data.permission
+      this.form.sort = data.sort
     },
     addMenu(row) {
       this.dialogFormVisible = true
@@ -201,6 +200,7 @@ export default {
       this.fillFormData(row)
     },
     submitAddOrModify(title) {
+      console.log(title, this.form)
       this.$refs.formRef.validate(vaild => {
         if (vaild) {
           if (title === '增加') {
@@ -248,10 +248,10 @@ export default {
           this.list()
         }).catch(err => console.log(err))
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
+        // this.$message({
+        //   type: 'info',
+        //   message: '已取消删除'
+        // })
       })
     }
   }
