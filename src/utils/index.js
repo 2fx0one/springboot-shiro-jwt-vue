@@ -1,46 +1,13 @@
 /**
- * Created by jiachenpan on 16/11/18.
+ * Created by PanJiaChen on 16/11/18.
  */
-export function listToTree(list, sort = true) {
-  const index = {}
-  const roots = []
-  // let node;
-  for (let i = 0; i < list.length; i += 1) {
-    index[list[i].id] = i // initialize the index
-    // list[i].children = [] // initialize the children
-  }
-  for (let i = 0; i < list.length; i += 1) {
-    const node = list[i]
-    if (node.parentId !== '0') {
-      // if you have dangling branches check that index[node.parentId] exists
-      const parent = list[index[node.parentId]]
-      if (parent) {
-        parent.children = parent.children || []
 
-        // 子节点 深度为父节点 +1
-        node.depth = parent.depth + 1
-        parent.children.push(node)
-      }
-    } else {
-      // 父节点 深度为0
-      node.depth = 0
-      roots.push(node)
-    }
-  }
-
-  // 会按照 sort 排序
-  if (sort) {
-    roots.forEach(e => {
-      if (e.children && e.children.length > 0) {
-        e.children.sort((a, b) => {
-          return a.sort - b.sort
-        })
-      }
-    })
-  }
-  return roots
-}
-
+/**
+ * Parse the time to string
+ * @param {(Object|string|number)} time
+ * @param {string} cFormat
+ * @returns {string}
+ */
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
     return null
@@ -70,9 +37,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') {
-      return ['日', '一', '二', '三', '四', '五', '六'][value]
-    }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
     if (result.length > 0 && value < 10) {
       value = '0' + value
     }
@@ -81,8 +46,17 @@ export function parseTime(time, cFormat) {
   return time_str
 }
 
+/**
+ * @param {number} time
+ * @param {string} option
+ * @returns {string}
+ */
 export function formatTime(time, option) {
-  time = +time * 1000
+  if (('' + time).length === 10) {
+    time = parseInt(time) * 1000
+  } else {
+    time = +time
+  }
   const d = new Date(time)
   const now = Date.now()
 
@@ -115,7 +89,10 @@ export function formatTime(time, option) {
   }
 }
 
-// 格式化时间
+/**
+ * @param {string} url
+ * @returns {Object}
+ */
 export function getQueryObject(url) {
   url = url == null ? window.location.href : url
   const search = url.substring(url.lastIndexOf('?') + 1)
@@ -132,22 +109,25 @@ export function getQueryObject(url) {
 }
 
 /**
- *get getByteLen
- * @param {Sting} val input value
+ * @param {string} input value
  * @returns {number} output value
  */
-export function getByteLen(val) {
-  let len = 0
-  for (let i = 0; i < val.length; i++) {
-    if (val[i].match(/[^\x00-\xff]/gi) != null) {
-      len += 1
-    } else {
-      len += 0.5
-    }
+export function byteLength(str) {
+  // returns the byte length of an utf8 string
+  let s = str.length
+  for (var i = str.length - 1; i >= 0; i--) {
+    const code = str.charCodeAt(i)
+    if (code > 0x7f && code <= 0x7ff) s++
+    else if (code > 0x7ff && code <= 0xffff) s += 2
+    if (code >= 0xDC00 && code <= 0xDFFF) i--
   }
-  return Math.floor(len)
+  return s
 }
 
+/**
+ * @param {Array} actual
+ * @returns {Array}
+ */
 export function cleanArray(actual) {
   const newArray = []
   for (let i = 0; i < actual.length; i++) {
@@ -158,6 +138,10 @@ export function cleanArray(actual) {
   return newArray
 }
 
+/**
+ * @param {Object} json
+ * @returns {Array}
+ */
 export function param(json) {
   if (!json) return ''
   return cleanArray(
@@ -168,6 +152,10 @@ export function param(json) {
   ).join('&')
 }
 
+/**
+ * @param {string} url
+ * @returns {Object}
+ */
 export function param2Obj(url) {
   const search = url.split('?')[1]
   if (!search) {
@@ -175,24 +163,32 @@ export function param2Obj(url) {
   }
   return JSON.parse(
     '{"' +
-    decodeURIComponent(search)
-      .replace(/"/g, '\\"')
-      .replace(/&/g, '","')
-      .replace(/=/g, '":"') +
-    '"}'
+      decodeURIComponent(search)
+        .replace(/"/g, '\\"')
+        .replace(/&/g, '","')
+        .replace(/=/g, '":"')
+        .replace(/\+/g, ' ') +
+      '"}'
   )
 }
 
+/**
+ * @param {string} val
+ * @returns {string}
+ */
 export function html2Text(val) {
   const div = document.createElement('div')
   div.innerHTML = val
   return div.textContent || div.innerText
 }
 
+/**
+ * Merges two objects, giving the last one precedence
+ * @param {Object} target
+ * @param {(Object|Array)} source
+ * @returns {Object}
+ */
 export function objectMerge(target, source) {
-  /* Merges two  objects,
-     giving the last one precedence */
-
   if (typeof target !== 'object') {
     target = {}
   }
@@ -210,6 +206,10 @@ export function objectMerge(target, source) {
   return target
 }
 
+/**
+ * @param {HTMLElement} element
+ * @param {string} className
+ */
 export function toggleClass(element, className) {
   if (!element || !className) {
     return
@@ -226,45 +226,10 @@ export function toggleClass(element, className) {
   element.className = classString
 }
 
-export const pickerOptions = [
-  {
-    text: '今天',
-    onClick(picker) {
-      const end = new Date()
-      const start = new Date(new Date().toDateString())
-      end.setTime(start.getTime())
-      picker.$emit('pick', [start, end])
-    }
-  },
-  {
-    text: '最近一周',
-    onClick(picker) {
-      const end = new Date(new Date().toDateString())
-      const start = new Date()
-      start.setTime(end.getTime() - 3600 * 1000 * 24 * 7)
-      picker.$emit('pick', [start, end])
-    }
-  },
-  {
-    text: '最近一个月',
-    onClick(picker) {
-      const end = new Date(new Date().toDateString())
-      const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-      picker.$emit('pick', [start, end])
-    }
-  },
-  {
-    text: '最近三个月',
-    onClick(picker) {
-      const end = new Date(new Date().toDateString())
-      const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-      picker.$emit('pick', [start, end])
-    }
-  }
-]
-
+/**
+ * @param {string} type
+ * @returns {Date}
+ */
 export function getTime(type) {
   if (type === 'start') {
     return new Date().getTime() - 3600 * 1000 * 24 * 90
@@ -273,6 +238,12 @@ export function getTime(type) {
   }
 }
 
+/**
+ * @param {Function} func
+ * @param {number} wait
+ * @param {boolean} immediate
+ * @return {*}
+ */
 export function debounce(func, wait, immediate) {
   let timeout, args, context, timestamp, result
 
@@ -280,7 +251,7 @@ export function debounce(func, wait, immediate) {
     // 据上一次触发时间间隔
     const last = +new Date() - timestamp
 
-    // 上次被包装函数被调用时间间隔last小于设定时间间隔wait
+    // 上次被包装函数被调用时间间隔 last 小于设定时间间隔 wait
     if (last < wait && last > 0) {
       timeout = setTimeout(later, wait - last)
     } else {
@@ -312,10 +283,12 @@ export function debounce(func, wait, immediate) {
  * This is just a simple version of deep copy
  * Has a lot of edge cases bug
  * If you want to use a perfect deep copy, use lodash's _.cloneDeep
+ * @param {Object} source
+ * @returns {Object}
  */
 export function deepClone(source) {
   if (!source && typeof source !== 'object') {
-    throw new Error('error arguments', 'shallowClone')
+    throw new Error('error arguments', 'deepClone')
   }
   const targetObj = source.constructor === Array ? [] : {}
   Object.keys(source).forEach(keys => {
@@ -328,10 +301,50 @@ export function deepClone(source) {
   return targetObj
 }
 
+/**
+ * @param {Array} arr
+ * @returns {Array}
+ */
 export function uniqueArr(arr) {
   return Array.from(new Set(arr))
 }
 
-export function isExternal(path) {
-  return /^(https?:|mailto:|tel:)/.test(path)
+/**
+ * @returns {string}
+ */
+export function createUniqueString() {
+  const timestamp = +new Date() + ''
+  const randomNum = parseInt((1 + Math.random()) * 65536) + ''
+  return (+(randomNum + timestamp)).toString(32)
+}
+
+/**
+ * Check if an element has a class
+ * @param {HTMLElement} elm
+ * @param {string} cls
+ * @returns {boolean}
+ */
+export function hasClass(ele, cls) {
+  return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'))
+}
+
+/**
+ * Add class to element
+ * @param {HTMLElement} elm
+ * @param {string} cls
+ */
+export function addClass(ele, cls) {
+  if (!hasClass(ele, cls)) ele.className += ' ' + cls
+}
+
+/**
+ * Remove class from element
+ * @param {HTMLElement} elm
+ * @param {string} cls
+ */
+export function removeClass(ele, cls) {
+  if (hasClass(ele, cls)) {
+    const reg = new RegExp('(\\s|^)' + cls + '(\\s|$)')
+    ele.className = ele.className.replace(reg, ' ')
+  }
 }
