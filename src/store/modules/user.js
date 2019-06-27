@@ -7,7 +7,7 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
-  roles: []
+  roles: [] // 就是 permission
 }
 
 const mutations = {
@@ -31,9 +31,11 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
+    // console.log('log')
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
+        // console.log(response)
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)
@@ -47,7 +49,10 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      // console.log(state)
+      // console.log(state.token)
+      getInfo().then(response => {
+        console.log(response)
         const { data } = response
 
         if (!data) {
@@ -75,7 +80,7 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
+      logout().then(() => {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
         removeToken()
