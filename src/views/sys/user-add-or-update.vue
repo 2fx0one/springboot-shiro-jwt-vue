@@ -127,7 +127,7 @@ export default {
             url: `/sys/user/info/${this.dataForm.id}`,
             method: 'get'
           }).then(({ data }) => {
-            if (data && data.code === 0) {
+            if (data) {
               this.dataForm.userName = data.user.username
               this.dataForm.salt = data.user.salt
               this.dataForm.email = data.user.email
@@ -144,9 +144,9 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$http({
-            url: this.$http.adornUrl(`/sys/user/${!this.dataForm.id ? 'save' : 'update'}`),
+            url: `/sys/user/${!this.dataForm.id ? 'save' : 'update'}`,
             method: 'post',
-            data: this.$http.adornData({
+            data: {
               'userId': this.dataForm.id || undefined,
               'username': this.dataForm.userName,
               'password': this.dataForm.password,
@@ -155,9 +155,9 @@ export default {
               'mobile': this.dataForm.mobile,
               'status': this.dataForm.status,
               'roleIdList': this.dataForm.roleIdList
-            })
+            }
           }).then(({ data }) => {
-            if (data && data.code === 0) {
+            if (data) {
               this.$message({
                 message: '操作成功',
                 type: 'success',
