@@ -14,7 +14,7 @@ import store from './store'
 import router from './router'
 
 import './icons' // icon
-import './permission' // permission control
+import './RouterPermission' // permission control
 import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
@@ -31,6 +31,11 @@ import { mockXHR } from '../mock'
 if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
+import permission from '@/directive/permission/permission'
+Vue.directive('permission', permission)
+
+import request from '@/utils/request'
+Vue.prototype.$http = request
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size

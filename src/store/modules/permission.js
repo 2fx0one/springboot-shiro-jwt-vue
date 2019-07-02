@@ -1,4 +1,7 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import { constantRoutes } from '@/router'
+import { getMenuNav } from '@/api/user'
+/* Layout */
+import Layout from '@/layout'
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -46,17 +49,43 @@ const mutations = {
   }
 }
 
+function menuToRouter(menu) {
+  // console.log('menuToRouter', menu)
+  if (menu.children) {
+    return {
+      path: menu.url,
+      component: Layout,
+      meta: { title: menu.name, icon: menu.icon },
+      children: menu.children.map(menuToRouter)
+    }
+  } else {
+    // menu.url = menu.url.replace(/^\//, '')
+    console.log('component ', `@/views/${menu.url}`)
+    return {
+      path: menu.url.replace('/', '-'),
+      component: () => import(`@/views/${menu.url}`),
+      meta: { title: menu.name, icon: menu.icon, noCache: true }
+    }
+  }
+}
+
 const actions = {
-  generateRoutes({ commit }, roles) {
+  generateRoutes({ commit }, userInfo) {
     return new Promise(resolve => {
-      let accessedRoutes
-      if (roles.includes('admin')) {
-        accessedRoutes = asyncRoutes || []
-      } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-      }
-      commit('SET_ROUTES', accessedRoutes)
-      resolve(accessedRoutes)
+      getMenuNav().then(({ data }) => {
+        console.log('getMenuNav userInfo', userInfo)
+        console.log('getMenuNav', data)
+
+        const accessedRoutes = data.menuList.map(menuToRouter)
+        // console.log(accessedRoutes)
+        // if (userInfo.name === 'admin') {
+        //   accessedRoutes = asyncRoutes || []
+        // } else {
+        //   accessedRoutes = []
+        // }
+        commit('SET_ROUTES', accessedRoutes)
+        resolve(accessedRoutes)
+      })
     })
   }
 }
