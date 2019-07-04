@@ -191,9 +191,9 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.adornUrl('/sys/user/delete'),
+          url: '/sys/user/delete',
           method: 'post',
-          data: this.$http.adornData(userIds, false)
+          data: userIds
         }).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message({
