@@ -5,15 +5,23 @@
         <el-button v-permission="'sys:menu:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
     </el-form>
+    <!--<tree-table :data="dataList" :columns="columns" border />-->
     <el-table
       :data="dataList"
       row-key="menuId"
       border
       style="width: 100%;"
-      default-expand-all
-      :tree-props="{children: 'children'}"
+      @cell-click="rowClick"
     >
+      <el-table-column
+        header-align="center"
+        label="名称"
+        width="150"
       >
+        <template slot-scope="scope">
+          <span v-text="`${scope.row.name}`" />
+        </template>
+      </el-table-column>
       <el-table-column
         prop="menuId"
         header-align="center"
@@ -21,26 +29,20 @@
         width="80"
         label="ID"
       />
-      <table-tree-column
-        prop="name"
-        header-align="center"
-        tree-key="menuId"
-        width="150"
-        label="名称"
-      />
-      <el-table-column
-        prop="parentName"
-        header-align="center"
-        align="center"
-        width="120"
-        label="上级菜单"
-      />
+      <!--<el-table-column-->
+      <!--prop="parentName"-->
+      <!--header-align="center"-->
+      <!--align="center"-->
+      <!--width="120"-->
+      <!--label="上级菜单"-->
+      <!--/>-->
       <el-table-column
         header-align="center"
         align="center"
         label="图标"
       >
         <template slot-scope="scope">
+          <span v-text="scope.row.icon" />
           <svg-icon :icon-class="scope.row.icon || ''" />
         </template>
       </el-table-column>
@@ -97,18 +99,20 @@
 </template>
 
 <script>
-import TableTreeColumn from '@/components/table-tree-column'
 import AddOrUpdate from './menu-add-or-update'
 import { treeDataTransform } from '@/utils'
 export default {
   components: {
-    TableTreeColumn,
     AddOrUpdate
   },
   data() {
     return {
       dataForm: {},
       dataList: [],
+      columns: {
+        label: 'name',
+        children: 'children'
+      },
       dataListLoading: false,
       addOrUpdateVisible: false
     }
@@ -117,6 +121,11 @@ export default {
     this.getDataList()
   },
   methods: {
+    rowClick(row, column, cell, event) {
+      if (column.label === 'ID') {
+        console.log('cell-click', row, column)
+      }
+    },
     // 获取数据列表
     getDataList() {
       this.dataListLoading = true

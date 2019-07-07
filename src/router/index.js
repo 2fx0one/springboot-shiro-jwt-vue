@@ -83,15 +83,27 @@ export const constantRoutes = [
       }
     ]
   },
+  // {
+  //   path: '/documentation',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/documentation/index'),
+  //       name: 'Documentation',
+  //       meta: { title: 'Documentation', icon: 'documentation', affix: true }
+  //     }
+  //   ]
+  // },
   {
-    path: '/documentation',
+    path: '/icon',
     component: Layout,
     children: [
       {
         path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'Documentation', icon: 'documentation', affix: true }
+        component: () => import('@/views/icons/index'),
+        name: 'Icons',
+        meta: { title: 'Icons', icon: 'icon', noCache: true }
       }
     ]
   },
