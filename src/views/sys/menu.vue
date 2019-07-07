@@ -2,7 +2,7 @@
   <div class="mod-menu">
     <el-form :inline="true" :model="dataForm">
       <el-form-item>
-        <el-button v-if="isAuth('sys:menu:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-permission="'sys:menu:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -82,8 +82,8 @@
         label="操作"
       >
         <template slot-scope="scope">
-          <el-button v-if="isAuth('sys:menu:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.menuId)">修改</el-button>
-          <el-button v-if="isAuth('sys:menu:delete')" type="text" size="small" @click="deleteHandle(scope.row.menuId)">删除</el-button>
+          <el-button v-permission="'sys:menu:update'" type="text" size="small" @click="addOrUpdateHandle(scope.row.menuId)">修改</el-button>
+          <el-button v-permission="'sys:menu:delete'" type="text" size="small" @click="deleteHandle(scope.row.menuId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -95,7 +95,7 @@
 <script>
 import TableTreeColumn from '@/components/table-tree-column'
 import AddOrUpdate from './menu-add-or-update'
-import { treeDataTranslate } from '@/utils'
+import { treeDataTransform } from '@/utils'
 export default {
   components: {
     TableTreeColumn,
@@ -117,11 +117,10 @@ export default {
     getDataList() {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/sys/menu/list'),
-        method: 'get',
-        params: this.$http.adornParams()
+        url: '/sys/menu/list',
+        method: 'get'
       }).then(({ data }) => {
-        this.dataList = treeDataTranslate(data, 'menuId')
+        this.dataList = treeDataTransform(data, 'menuId')
         this.dataListLoading = false
       })
     },
@@ -140,22 +139,17 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.adornUrl(`/sys/menu/delete/${id}`),
-          method: 'post',
-          data: this.$http.adornData()
-        }).then(({ data }) => {
-          if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
-          } else {
-            this.$message.error(data.msg)
-          }
+          url: `/sys/menu/delete/${id}`,
+          method: 'post'
+        }).then(({ msg }) => {
+          this.$message({
+            message: msg || '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.getDataList()
+            }
+          })
         })
       }).catch(() => {})
     }

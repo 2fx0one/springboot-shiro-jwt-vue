@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { isEmail, isMobile } from '@/utils/validate'
+import { validEmail, isMobile } from '@/utils/validate'
 export default {
   data() {
     var validatePassword = (rule, value, callback) => {
@@ -60,7 +60,7 @@ export default {
       }
     }
     var validateEmail = (rule, value, callback) => {
-      if (!isEmail(value)) {
+      if (!validEmail(value)) {
         callback(new Error('邮箱格式错误'))
       } else {
         callback()
@@ -128,12 +128,12 @@ export default {
             method: 'get'
           }).then(({ data }) => {
             if (data) {
-              this.dataForm.userName = data.user.username
-              this.dataForm.salt = data.user.salt
-              this.dataForm.email = data.user.email
-              this.dataForm.mobile = data.user.mobile
-              this.dataForm.roleIdList = data.user.roleIdList
-              this.dataForm.status = data.user.status
+              this.dataForm.userName = data.username
+              this.dataForm.salt = data.salt
+              this.dataForm.email = data.email
+              this.dataForm.mobile = data.mobile
+              this.dataForm.roleIdList = data.roleIdList
+              this.dataForm.status = data.status
             }
           })
         }
@@ -156,20 +156,16 @@ export default {
               'status': this.dataForm.status,
               'roleIdList': this.dataForm.roleIdList
             }
-          }).then(({ data }) => {
-            if (data) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
+          }).then(({ msg }) => {
+            this.$message({
+              message: msg || '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.visible = false
+                this.$emit('refreshDataList')
+              }
+            })
           })
         }
       })

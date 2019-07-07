@@ -63,6 +63,13 @@ export function validEmail(email) {
   const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return reg.test(email)
 }
+/**
+ * 手机号码
+ * @param {*} s
+ */
+export function isMobile(s) {
+  return /^1[0-9]{10}$/.test(s)
+}
 
 /**
  * @param {string} str

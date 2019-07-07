@@ -129,7 +129,6 @@ export default {
           'username': this.dataForm.userName
         }
       }).then(({ data }) => {
-        console.log(data)
         if (data) {
           this.dataList = data.records
           this.totalPage = data.total
@@ -139,24 +138,6 @@ export default {
         }
         this.dataListLoading = false
       })
-      // this.$http({
-      //   url: this.$http.adornUrl('/sys/user/list'),
-      //   method: 'get',
-      //   params: this.$http.adornParams({
-      //     'page': this.pageIndex,
-      //     'limit': this.pageSize,
-      //     'username': this.dataForm.userName
-      //   })
-      // }).then(({ data }) => {
-      //   if (data && data.code === 0) {
-      //     this.dataList = data.page.list
-      //     this.totalPage = data.page.totalCount
-      //   } else {
-      //     this.dataList = []
-      //     this.totalPage = 0
-      //   }
-      //   this.dataListLoading = false
-      // })
     },
     // 每页数
     sizeChangeHandle(val) {
@@ -194,19 +175,15 @@ export default {
           url: '/sys/user/delete',
           method: 'post',
           data: userIds
-        }).then(({ data }) => {
-          if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
-          } else {
-            this.$message.error(data.msg)
-          }
+        }).then(({ msg }) => {
+          this.$message({
+            message: msg || '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.getDataList()
+            }
+          })
         })
       }).catch(() => {})
     }
