@@ -7,9 +7,13 @@
     </el-form>
     <el-table
       :data="dataList"
+      row-key="menuId"
       border
       style="width: 100%;"
+      default-expand-all
+      :tree-props="{children: 'children'}"
     >
+      >
       <el-table-column
         prop="menuId"
         header-align="center"
@@ -37,7 +41,7 @@
         label="图标"
       >
         <template slot-scope="scope">
-          <icon-svg :name="scope.row.icon || ''" />
+          <svg-icon :icon-class="scope.row.icon || ''" />
         </template>
       </el-table-column>
       <el-table-column
@@ -109,7 +113,7 @@ export default {
       addOrUpdateVisible: false
     }
   },
-  activated() {
+  created() {
     this.getDataList()
   },
   methods: {
@@ -121,6 +125,7 @@ export default {
         method: 'get'
       }).then(({ data }) => {
         this.dataList = treeDataTransform(data, 'menuId')
+        console.log(this.dataList)
         this.dataListLoading = false
       })
     },

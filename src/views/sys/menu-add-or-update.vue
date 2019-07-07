@@ -58,7 +58,8 @@
                     :class="{ 'is-active': item === dataForm.icon }"
                     @click="iconActiveHandle(item)"
                   >
-                    <icon-svg :name="item" />
+                    <svg-icon :icon-class="item" />
+                    <!--<icon-svg :name="item" />-->
                   </el-button>
                 </div>
               </div>
@@ -82,8 +83,8 @@
 </template>
 
 <script>
-import { treeDataTranslate } from '@/utils'
-import Icon from '@/icons'
+import { treeDataTransform } from '@/utils'
+import svgIcons from '@/views/icons/svg-icons'
 export default {
   data() {
     var validateUrl = (rule, value, callback) => {
@@ -127,17 +128,17 @@ export default {
     }
   },
   created() {
-    this.iconList = Icon.getNameList()
+    this.iconList = svgIcons// Icon.getNameList()
+    console.log(this.iconList)
   },
   methods: {
     init(id) {
       this.dataForm.id = id || 0
       this.$http({
-        url: this.$http.adornUrl('/sys/menu/select'),
-        method: 'get',
-        params: this.$http.adornParams()
+        url: '/sys/menu/select',
+        method: 'get'
       }).then(({ data }) => {
-        this.menuList = treeDataTranslate(data.menuList, 'menuId')
+        this.menuList = treeDataTransform(data, 'menuId')
       }).then(() => {
         this.visible = true
         this.$nextTick(() => {
@@ -150,18 +151,17 @@ export default {
         } else {
           // 修改
           this.$http({
-            url: this.$http.adornUrl(`/sys/menu/info/${this.dataForm.id}`),
-            method: 'get',
-            params: this.$http.adornParams()
+            url: `/sys/menu/info/${this.dataForm.id}`,
+            method: 'get'
           }).then(({ data }) => {
-            this.dataForm.id = data.menu.menuId
-            this.dataForm.type = data.menu.type
-            this.dataForm.name = data.menu.name
-            this.dataForm.parentId = data.menu.parentId
-            this.dataForm.url = data.menu.url
-            this.dataForm.perms = data.menu.perms
-            this.dataForm.orderNum = data.menu.orderNum
-            this.dataForm.icon = data.menu.icon
+            this.dataForm.id = data.menuId
+            this.dataForm.type = data.type
+            this.dataForm.name = data.name
+            this.dataForm.parentId = data.parentId
+            this.dataForm.url = data.url
+            this.dataForm.perms = data.perms
+            this.dataForm.orderNum = data.orderNum
+            this.dataForm.icon = data.icon
             this.menuListTreeSetCurrentNode()
           })
         }
@@ -186,9 +186,9 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$http({
-            url: this.$http.adornUrl(`/sys/menu/${!this.dataForm.id ? 'save' : 'update'}`),
+            url: `/sys/menu/${!this.dataForm.id ? 'save' : 'update'}`,
             method: 'post',
-            data: this.$http.adornData({
+            data: {
               'menuId': this.dataForm.id || undefined,
               'type': this.dataForm.type,
               'name': this.dataForm.name,
@@ -197,21 +197,17 @@ export default {
               'perms': this.dataForm.perms,
               'orderNum': this.dataForm.orderNum,
               'icon': this.dataForm.icon
-            })
-          }).then(({ data }) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
             }
+          }).then(({ msg }) => {
+            this.$message({
+              message: msg || '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.visible = false
+                this.$emit('refreshDataList')
+              }
+            })
           })
         }
       })
