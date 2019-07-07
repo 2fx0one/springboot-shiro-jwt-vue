@@ -1,5 +1,5 @@
 <template>
-  <div class="mod-config">
+  <div class="app-container">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-input v-model="dataForm.paramKey" placeholder="参数名" clearable />
@@ -95,7 +95,7 @@ export default {
       addOrUpdateVisible: false
     }
   },
-  activated() {
+  created() {
     this.getDataList()
   },
   methods: {
@@ -103,17 +103,17 @@ export default {
     getDataList() {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/sys/config/list'),
+        url: '/sys/config/list',
         method: 'get',
-        params: this.$http.adornParams({
+        params: {
           'page': this.pageIndex,
           'limit': this.pageSize,
           'paramKey': this.dataForm.paramKey
-        })
+        }
       }).then(({ data }) => {
-        if (data && data.code === 0) {
-          this.dataList = data.page.list
-          this.totalPage = data.page.totalCount
+        if (data) {
+          this.dataList = data.list
+          this.totalPage = data.totalCount
         } else {
           this.dataList = []
           this.totalPage = 0

@@ -1,11 +1,11 @@
 <template>
-  <div class="mod-log">
+  <div class="app-container">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-input v-model="dataForm.key" placeholder="用户名／用户操作" clearable />
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
+        <el-button type="button" @click="getDataList()">查询</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -105,17 +105,17 @@ export default {
     getDataList() {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/sys/log/list'),
+        url: '/sys/log/list',
         method: 'get',
-        params: this.$http.adornParams({
+        params: {
           'page': this.pageIndex,
           'limit': this.pageSize,
           'key': this.dataForm.key
-        })
+        }
       }).then(({ data }) => {
-        if (data && data.code === 0) {
-          this.dataList = data.page.list
-          this.totalPage = data.page.totalCount
+        if (data) {
+          this.dataList = data.records
+          this.totalPage = data.total
         } else {
           this.dataList = []
           this.totalPage = 0

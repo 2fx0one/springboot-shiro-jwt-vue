@@ -1,5 +1,5 @@
 <template>
-  <div class="mod-menu">
+  <div class="app-container">
     <el-form :inline="true" :model="dataForm">
       <el-form-item>
         <el-button v-permission="'sys:menu:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
