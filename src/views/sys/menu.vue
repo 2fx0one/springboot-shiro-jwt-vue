@@ -165,7 +165,7 @@ export default {
             }
           })
         })
-      }).catch(() => {})
+      })
     }
   }
 }

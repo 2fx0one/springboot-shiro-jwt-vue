@@ -171,7 +171,7 @@ export default {
             this.$message.error(data.msg)
           }
         })
-      }).catch(() => {})
+      })
     }
   }
 }
