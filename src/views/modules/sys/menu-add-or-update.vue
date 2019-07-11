@@ -4,16 +4,16 @@
     :close-on-click-modal="false"
     :visible.sync="visible"
   >
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px" @keyup.enter.native="dataFormSubmit()">
-      <el-form-item label="类型" prop="type">
+    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px" @keyup.enter.native="dataFormSubmit()">
+      <el-form-item label="类型：" prop="type">
         <el-radio-group v-model="dataForm.type">
           <el-radio v-for="(type, index) in dataForm.typeList" :key="index" :label="index">{{ type }}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item :label="dataForm.typeList[dataForm.type] + '名称'" prop="name">
+      <el-form-item :label="dataForm.typeList[dataForm.type] + '名称：'" prop="name">
         <el-input v-model="dataForm.name" :placeholder="dataForm.typeList[dataForm.type] + '名称'" />
       </el-form-item>
-      <el-form-item label="上级菜单" prop="parentName">
+      <el-form-item label="上级菜单：" prop="parentName">
         <el-popover
           ref="menuListPopover"
           placement="bottom-start"
@@ -32,18 +32,18 @@
         </el-popover>
         <el-input v-model="dataForm.parentName" v-popover:menuListPopover :readonly="true" placeholder="点击选择上级菜单" class="menu-list__input" />
       </el-form-item>
-      <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="url">
+      <el-form-item v-if="dataForm.type === 1" label="菜单路由：" prop="url">
         <el-input v-model="dataForm.url" placeholder="菜单路由" />
       </el-form-item>
-      <el-form-item v-if="dataForm.type !== 0" label="授权标识" prop="perms">
+      <el-form-item v-if="dataForm.type !== 0" label="授权标识：" prop="perms">
         <el-input v-model="dataForm.perms" placeholder="多个用逗号分隔, 如: user:list,user:create" />
       </el-form-item>
-      <el-form-item v-if="dataForm.type !== 2" label="排序号" prop="orderNum">
+      <el-form-item v-if="dataForm.type !== 2" label="排序号：" prop="orderNum">
         <el-input-number v-model="dataForm.orderNum" controls-position="right" :min="0" label="排序号" />
       </el-form-item>
-      <el-form-item v-if="dataForm.type !== 2" label="菜单图标" prop="icon">
+      <el-form-item v-if="dataForm.type !== 2" label="菜单图标：" prop="icon">
         <el-row>
-          <el-col :span="22">
+          <el-col :span="20">
             <el-popover
               ref="iconListPopover"
               placement="bottom-start"
@@ -68,7 +68,7 @@
           </el-col>
           <el-col :span="2" class="icon-list__tips">
             <el-tooltip placement="top" effect="light">
-              <div slot="content">全站推荐使用SVG Sprite, 详细请参考:<a href="//github.com/daxiongYang/renren-fast-vue/blob/master/src/icons/index.js" target="_blank">icons/index.js</a>描述</div>
+              <div slot="content">全站推荐使用SVG Sprite, 详细请点击<a style="color: #4A9FF9;" href="https://panjiachen.github.io/vue-element-admin-site/feature/component/svg-icon.html#usage" target="_blank">参考文档</a></div>
               <i class="el-icon-warning" />
             </el-tooltip>
           </el-col>
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { treeDataTransform } from '@/utils'
+import { listToTree } from '@/utils'
 import svgIcons from '@/views/icons/svg-icons'
 export default {
   data() {
@@ -138,7 +138,7 @@ export default {
         url: '/sys/menu/select',
         method: 'get'
       }).then(({ data }) => {
-        this.menuList = treeDataTransform(data, 'menuId')
+        this.menuList = listToTree(data, 'menuId')
       }).then(() => {
         this.visible = true
         this.$nextTick(() => {

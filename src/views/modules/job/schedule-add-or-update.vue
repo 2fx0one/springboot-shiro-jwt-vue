@@ -83,9 +83,9 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$http({
-            url: this.$http.adornUrl(`/sys/schedule/${!this.dataForm.id ? 'save' : 'update'}`),
+            url: `/sys/schedule/${!this.dataForm.id ? 'save' : 'update'}`,
             method: 'post',
-            data: this.$http.adornData({
+            data: {
               'jobId': this.dataForm.id || undefined,
               'beanName': this.dataForm.beanName,
               'methodName': this.dataForm.methodName,
@@ -93,21 +93,17 @@ export default {
               'cronExpression': this.dataForm.cronExpression,
               'remark': this.dataForm.remark,
               'status': !this.dataForm.id ? undefined : this.dataForm.status
-            })
-          }).then(({ data }) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
             }
+          }).then(({ msg }) => {
+            this.$message({
+              message: msg || '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.visible = false
+                this.$emit('refreshDataList')
+              }
+            })
           })
         }
       })

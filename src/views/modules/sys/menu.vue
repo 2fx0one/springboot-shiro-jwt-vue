@@ -5,8 +5,8 @@
         <el-button v-permission="'sys:menu:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
     </el-form>
-    <!--<tree-table :data="dataList" :columns="columns" border />-->
     <el-table
+      ref="menuTable"
       :data="dataList"
       row-key="menuId"
       border
@@ -29,13 +29,6 @@
         width="80"
         label="ID"
       />
-      <!--<el-table-column-->
-      <!--prop="parentName"-->
-      <!--header-align="center"-->
-      <!--align="center"-->
-      <!--width="120"-->
-      <!--label="上级菜单"-->
-      <!--/>-->
       <el-table-column
         header-align="center"
         align="center"
@@ -100,7 +93,7 @@
 
 <script>
 import AddOrUpdate from './menu-add-or-update'
-import { treeDataTransform } from '@/utils'
+import { listToTree } from '@/utils'
 export default {
   components: {
     AddOrUpdate
@@ -109,10 +102,21 @@ export default {
     return {
       dataForm: {},
       dataList: [],
-      columns: {
-        label: 'name',
-        children: 'children'
-      },
+      columns: [
+        {
+          text: '名称',
+          value: 'name',
+          width: 300
+        },
+        {
+          text: 'ID',
+          value: 'menuId'
+        },
+        {
+          text: '图标',
+          value: 'icon'
+        }
+      ],
       dataListLoading: false,
       addOrUpdateVisible: false
     }
@@ -122,9 +126,11 @@ export default {
   },
   methods: {
     rowClick(row, column, cell, event) {
-      if (column.label === 'ID') {
-        console.log('cell-click', row, column)
-      }
+      console.log('cell-click row ', row)
+      console.log('cell-click column ', column)
+      // if (column.label === 'ID') {
+      //   console.log('cell-click', row, column)
+      // }
     },
     // 获取数据列表
     getDataList() {
@@ -133,9 +139,14 @@ export default {
         url: '/sys/menu/list',
         method: 'get'
       }).then(({ data }) => {
-        this.dataList = treeDataTransform(data, 'menuId')
+        this.dataList = listToTree(data, 'menuId')
         console.log(this.dataList)
-        this.dataListLoading = false
+        this.$nextTick(() => {
+          this.dataListLoading = false
+          this.$refs.menuTable.toggleRowExpansion({
+            menuId: 1
+          }, true)
+        })
       })
     },
     // 新增 / 修改

@@ -115,7 +115,9 @@ export default {
         url: '/sys/role/select',
         method: 'get'
       }).then(({ data }) => {
-        this.roleList = data && data.code === 0 ? data.list : []
+        if (data) {
+          this.roleList = data
+        }
       }).then(() => {
         this.visible = true
         this.$nextTick(() => {

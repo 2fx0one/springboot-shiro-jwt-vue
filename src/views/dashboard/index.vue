@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <component :is="currentRole" />
+    <component :is="current" />
   </div>
 </template>
 
@@ -14,7 +14,7 @@ export default {
   components: { adminDashboard, editorDashboard },
   data() {
     return {
-      currentRole: 'adminDashboard'
+      current: 'adminDashboard'
     }
   },
   computed: {
@@ -23,9 +23,10 @@ export default {
     ])
   },
   created() {
-    if (!this.roles.includes('admin')) {
-      this.currentRole = 'editorDashboard'
-    }
+    // console.log(this.roles)
+    // if (!this.roles.includes('admin')) {
+    //   this.currentRole = 'editorDashboard'
+    // }
   }
 }
 </script>

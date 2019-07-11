@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     init(id) {
-      this.url = this.$http.adornUrl(`/sys/oss/upload?token=${this.$cookie.get('token')}`)
+      this.url = `/sys/oss/upload?token=${this.$cookie.get('token')}`
       this.visible = true
     },
     // 上传之前
@@ -49,7 +49,7 @@ export default {
     successHandle(response, file, fileList) {
       this.fileList = fileList
       this.successNum++
-      if (response && response.code === 0) {
+      if (response) {
         if (this.num === this.successNum) {
           this.$confirm('操作成功, 是否继续操作?', '提示', {
             confirmButtonText: '确定',

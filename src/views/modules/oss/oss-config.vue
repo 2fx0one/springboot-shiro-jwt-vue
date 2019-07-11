@@ -96,9 +96,8 @@ export default {
     init(id) {
       this.visible = true
       this.$http({
-        url: this.$http.adornUrl('/sys/oss/config'),
-        method: 'get',
-        params: this.$http.adornParams()
+        url: '/sys/oss/config',
+        method: 'get'
       }).then(({ data }) => {
         this.dataForm = data && data.code === 0 ? data.config : []
       })
@@ -108,9 +107,9 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$http({
-            url: this.$http.adornUrl('/sys/oss/saveConfig'),
+            url: '/sys/oss/saveConfig',
             method: 'post',
-            data: this.$http.adornData(this.dataForm)
+            data: this.dataForm
           }).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({
@@ -121,8 +120,6 @@ export default {
                   this.visible = false
                 }
               })
-            } else {
-              this.$message.error(data.msg)
             }
           })
         }

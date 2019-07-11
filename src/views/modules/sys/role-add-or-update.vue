@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { treeDataTransform } from '@/utils'
+import { listToTree } from '@/utils'
 export default {
   data() {
     return {
@@ -60,7 +60,7 @@ export default {
         url: '/sys/menu/list',
         method: 'get'
       }).then(({ data }) => {
-        this.menuList = treeDataTransform(data, 'menuId')
+        this.menuList = listToTree(data, 'menuId')
       }).then(() => {
         this.visible = true
         this.$nextTick(() => {

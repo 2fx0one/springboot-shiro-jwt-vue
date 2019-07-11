@@ -1,13 +1,10 @@
 <template>
-  <div class="app-container">
-    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+  <div class="mod-oss">
+    <el-form :inline="true" :model="dataForm">
       <el-form-item>
-        <el-input v-model="dataForm.roleName" placeholder="角色名称" clearable />
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button v-permission="'sys:role:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-permission="'sys:role:delete'" type="danger" :disabled="dataListSelections.length <= 0" @click="deleteHandle()">批量删除</el-button>
+        <el-button type="primary" @click="configHandle()">云存储配置</el-button>
+        <el-button type="primary" @click="uploadHandle()">上传文件</el-button>
+        <el-button type="danger" :disabled="dataListSelections.length <= 0" @click="deleteHandle()">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -24,26 +21,20 @@
         width="50"
       />
       <el-table-column
-        prop="roleId"
+        prop="id"
         header-align="center"
         align="center"
         width="80"
         label="ID"
       />
       <el-table-column
-        prop="roleName"
+        prop="url"
         header-align="center"
         align="center"
-        label="角色名称"
+        label="URL地址"
       />
       <el-table-column
-        prop="remark"
-        header-align="center"
-        align="center"
-        label="备注"
-      />
-      <el-table-column
-        prop="createTime"
+        prop="createDate"
         header-align="center"
         align="center"
         width="180"
@@ -57,8 +48,7 @@
         label="操作"
       >
         <template slot-scope="scope">
-          <el-button v-permission="'sys:role:update'" type="text" size="small" @click="addOrUpdateHandle(scope.row.roleId)">修改</el-button>
-          <el-button v-permission="'sys:role:delete'" type="text" size="small" @click="deleteHandle(scope.row.roleId)">删除</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -71,29 +61,32 @@
       @size-change="sizeChangeHandle"
       @current-change="currentChangeHandle"
     />
-    <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList" />
+    <!-- 弹窗, 云存储配置 -->
+    <config v-if="configVisible" ref="config" />
+    <!-- 弹窗, 上传文件 -->
+    <upload v-if="uploadVisible" ref="upload" @refreshDataList="getDataList" />
   </div>
 </template>
 
 <script>
-import AddOrUpdate from './role-add-or-update'
+import Config from './oss-config'
+import Upload from './oss-upload'
 export default {
   components: {
-    AddOrUpdate
+    Config,
+    Upload
   },
   data() {
     return {
-      dataForm: {
-        roleName: ''
-      },
+      dataForm: {},
       dataList: [],
       pageIndex: 1,
       pageSize: 10,
       totalPage: 0,
       dataListLoading: false,
       dataListSelections: [],
-      addOrUpdateVisible: false
+      configVisible: false,
+      uploadVisible: false
     }
   },
   created() {
@@ -104,16 +97,15 @@ export default {
     getDataList() {
       this.dataListLoading = true
       this.$http({
-        url: '/sys/role/list',
+        url: '/sys/oss/list',
         method: 'get',
         params: {
           'page': this.pageIndex,
-          'limit': this.pageSize,
-          'roleName': this.dataForm.roleName
+          'limit': this.pageSize
         }
       }).then(({ data }) => {
         if (data) {
-          this.dataList = data.records
+          this.dataList = data.list
           this.totalPage = data.total
         } else {
           this.dataList = []
@@ -137,17 +129,24 @@ export default {
     selectionChangeHandle(val) {
       this.dataListSelections = val
     },
-    // 新增 / 修改
-    addOrUpdateHandle(id) {
-      this.addOrUpdateVisible = true
+    // 云存储配置
+    configHandle() {
+      this.configVisible = true
       this.$nextTick(() => {
-        this.$refs.addOrUpdate.init(id)
+        this.$refs.config.init()
+      })
+    },
+    // 上传文件
+    uploadHandle() {
+      this.uploadVisible = true
+      this.$nextTick(() => {
+        this.$refs.upload.init()
       })
     },
     // 删除
     deleteHandle(id) {
       var ids = id ? [id] : this.dataListSelections.map(item => {
-        return item.roleId
+        return item.id
       })
       this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
@@ -155,7 +154,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: '/sys/role/delete',
+          url: '/sys/oss/delete',
           method: 'post',
           data: ids
         }).then(({ msg }) => {
@@ -168,7 +167,7 @@ export default {
             }
           })
         })
-      })
+      }).catch(() => {})
     }
   }
 }

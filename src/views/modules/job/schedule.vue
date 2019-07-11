@@ -1,5 +1,5 @@
 <template>
-  <div class="mod-schedule">
+  <div class="app-container mod-schedule">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-input v-model="dataForm.beanName" placeholder="bean名称" clearable />
@@ -130,7 +130,7 @@ export default {
       logVisible: false
     }
   },
-  activated() {
+  created() {
     this.getDataList()
   },
   methods: {
@@ -140,15 +140,15 @@ export default {
       this.$http({
         url: '/sys/schedule/list',
         method: 'get',
-        params: this.$http.adornParams({
+        params: {
           'page': this.pageIndex,
           'limit': this.pageSize,
           'beanName': this.dataForm.beanName
-        })
+        }
       }).then(({ data }) => {
-        if (data && data.code === 0) {
-          this.dataList = data.page.list
-          this.totalPage = data.page.totalCount
+        if (data) {
+          this.dataList = data.list
+          this.totalPage = data.total
         } else {
           this.dataList = []
           this.totalPage = 0
@@ -189,22 +189,18 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.adornUrl('/sys/schedule/delete'),
+          url: '/sys/schedule/delete',
           method: 'post',
-          data: this.$http.adornData(ids, false)
-        }).then(({ data }) => {
-          if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
-          } else {
-            this.$message.error(data.msg)
-          }
+          data: ids
+        }).then(({ msg }) => {
+          this.$message({
+            message: msg || '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.getDataList()
+            }
+          })
         })
       }).catch(() => {})
     },
@@ -219,22 +215,18 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.adornUrl('/sys/schedule/pause'),
+          url: '/sys/schedule/pause',
           method: 'post',
-          data: this.$http.adornData(ids, false)
-        }).then(({ data }) => {
-          if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
-          } else {
-            this.$message.error(data.msg)
-          }
+          data: ids
+        }).then(({ msg }) => {
+          this.$message({
+            message: msg || '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.getDataList()
+            }
+          })
         })
       }).catch(() => {})
     },
@@ -249,24 +241,20 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.adornUrl('/sys/schedule/resume'),
+          url: '/sys/schedule/resume',
           method: 'post',
-          data: this.$http.adornData(ids, false)
-        }).then(({ data }) => {
-          if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
-          } else {
-            this.$message.error(data.msg)
-          }
+          data: ids
+        }).then(({ msg }) => {
+          this.$message({
+            message: msg || '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.getDataList()
+            }
+          })
         })
-      }).catch(() => {})
+      })
     },
     // 立即执行
     runHandle(id) {
@@ -279,24 +267,20 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.adornUrl('/sys/schedule/run'),
+          url: '/sys/schedule/run',
           method: 'post',
-          data: this.$http.adornData(ids, false)
-        }).then(({ data }) => {
-          if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
-          } else {
-            this.$message.error(data.msg)
-          }
+          data: ids
+        }).then(({ msg }) => {
+          this.$message({
+            message: msg || '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.getDataList()
+            }
+          })
         })
-      }).catch(() => {})
+      })
     },
     // 日志列表
     logHandle() {

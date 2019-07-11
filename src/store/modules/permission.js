@@ -60,10 +60,10 @@ function menuToRouter(menu) {
     }
   } else {
     // menu.url = menu.url.replace(/^\//, '')
-    console.log('component ', `@/views/${menu.url}`)
+    console.log('component ', `@/views/modules/${menu.url}`)
     return {
       path: menu.url.replace('/', '-'),
-      component: () => import(`@/views/${menu.url}`),
+      component: () => import(`@/views/modules/${menu.url}`),
       meta: { title: menu.name, icon: menu.icon, noCache: true }
     }
   }

@@ -2,6 +2,20 @@
  * Created by PanJiaChen on 16/11/18.
  */
 
+// 配合 tree-table 组件
+export function listToTree(list, id = 'id', pid = 'parentId') {
+  const getChildren = function(parent, list, level) {
+    parent.level = level + 1
+    parent.children = list.filter(m => m[pid] === parent[id]).map(m => getChildren(m, list, parent.level))
+    if (parent.children && parent.children.length === 0) {
+      delete parent.children
+    }
+    return parent
+  }
+
+  return list.filter(m => m[pid] === 0).map(m => getChildren(m, list, 0))
+}
+
 /**
  * 树形数据转换
  * @param {*} data

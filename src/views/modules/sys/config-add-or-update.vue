@@ -51,11 +51,10 @@ export default {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
           this.$http({
-            url: this.$http.adornUrl(`/sys/config/info/${this.dataForm.id}`),
-            method: 'get',
-            params: this.$http.adornParams()
+            url: `/sys/config/info/${this.dataForm.id}`,
+            method: 'get'
           }).then(({ data }) => {
-            if (data && data.code === 0) {
+            if (data) {
               this.dataForm.paramKey = data.config.paramKey
               this.dataForm.paramValue = data.config.paramValue
               this.dataForm.remark = data.config.remark
@@ -69,14 +68,14 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$http({
-            url: this.$http.adornUrl(`/sys/config/${!this.dataForm.id ? 'save' : 'update'}`),
+            url: `/sys/config/${!this.dataForm.id ? 'save' : 'update'}`,
             method: 'post',
-            data: this.$http.adornData({
+            data: {
               'id': this.dataForm.id || undefined,
               'paramKey': this.dataForm.paramKey,
               'paramValue': this.dataForm.paramValue,
               'remark': this.dataForm.remark
-            })
+            }
           }).then(({ msg }) => {
             this.$message({
               message: msg || '操作成功',

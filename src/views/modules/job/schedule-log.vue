@@ -1,73 +1,80 @@
 <template>
-  <div class="app-container">
+  <el-dialog
+    title="日志列表"
+    :close-on-click-modal="false"
+    :visible.sync="visible"
+    width="75%"
+  >
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.key" placeholder="用户名／用户操作" clearable />
+        <el-input v-model="dataForm.id" placeholder="任务ID" clearable />
       </el-form-item>
       <el-form-item>
-        <el-button type="button" @click="getDataList()">查询</el-button>
+        <el-button @click="getDataList()">查询</el-button>
       </el-form-item>
     </el-form>
     <el-table
       v-loading="dataListLoading"
       :data="dataList"
       border
-      style="width: 100%"
+      height="460"
+      style="width: 100%;"
     >
       <el-table-column
-        prop="id"
+        prop="logId"
         header-align="center"
         align="center"
         width="80"
-        label="ID"
+        label="日志ID"
       />
       <el-table-column
-        prop="username"
+        prop="jobId"
         header-align="center"
         align="center"
-        label="用户名"
+        width="80"
+        label="任务ID"
       />
       <el-table-column
-        prop="operation"
+        prop="beanName"
         header-align="center"
         align="center"
-        label="用户操作"
+        label="bean名称"
       />
       <el-table-column
-        prop="method"
+        prop="methodName"
         header-align="center"
         align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="请求方法"
+        label="方法名称"
       />
       <el-table-column
         prop="params"
         header-align="center"
         align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="请求参数"
+        label="参数"
       />
       <el-table-column
-        prop="time"
+        prop="status"
         header-align="center"
         align="center"
-        label="执行时长(毫秒)"
-      />
+        label="状态"
+      >
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === 0" size="small">成功</el-tag>
+          <el-tag v-else size="small" type="danger" style="cursor: pointer;" @click.native="showErrorInfo(scope.row.logId)">失败</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
-        prop="ip"
+        prop="times"
         header-align="center"
         align="center"
-        width="150"
-        label="IP地址"
+        label="耗时(单位: 毫秒)"
       />
       <el-table-column
-        prop="createDate"
+        prop="createTime"
         header-align="center"
         align="center"
         width="180"
-        label="创建时间"
+        label="执行时间"
       />
     </el-table>
     <el-pagination
@@ -79,42 +86,44 @@
       @size-change="sizeChangeHandle"
       @current-change="currentChangeHandle"
     />
-  </div>
+  </el-dialog>
 </template>
 
 <script>
 export default {
+  name: 'ScheduleLog',
   data() {
     return {
+      visible: false,
       dataForm: {
-        key: ''
+        id: ''
       },
       dataList: [],
       pageIndex: 1,
       pageSize: 10,
       totalPage: 0,
-      dataListLoading: false,
-      selectionDataList: []
+      dataListLoading: false
     }
   },
-  created() {
-    this.getDataList()
-  },
   methods: {
+    init() {
+      this.visible = true
+      this.getDataList()
+    },
     // 获取数据列表
     getDataList() {
       this.dataListLoading = true
       this.$http({
-        url: '/sys/log/list',
+        url: '/sys/scheduleLog/list',
         method: 'get',
         params: {
           'page': this.pageIndex,
           'limit': this.pageSize,
-          'key': this.dataForm.key
+          'jobId': this.dataForm.id
         }
       }).then(({ data }) => {
         if (data) {
-          this.dataList = data.records
+          this.dataList = data.list
           this.totalPage = data.total
         } else {
           this.dataList = []
@@ -133,6 +142,19 @@ export default {
     currentChangeHandle(val) {
       this.pageIndex = val
       this.getDataList()
+    },
+    // 失败信息
+    showErrorInfo(id) {
+      this.$http({
+        url: `/sys/scheduleLog/info/${id}`,
+        method: 'get'
+      }).then(({ data }) => {
+        if (data) {
+          this.$alert(data.log.error)
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
     }
   }
 }
