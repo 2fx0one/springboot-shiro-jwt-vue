@@ -61,7 +61,7 @@ const actions = {
 
         // roles must be a non-empty array
         if (!permissions || permissions.length <= 0) {
-          reject('getInfo: permissions must be a non-null array!')
+          reject('无用户权限! getInfo: permissions must be a non-null array!')
         }
 
         commit('SET_ROLES', [])

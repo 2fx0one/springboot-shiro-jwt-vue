@@ -4,7 +4,13 @@
     :close-on-click-modal="false"
     :visible.sync="visible"
   >
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="120px" @keyup.enter.native="dataFormSubmit()">
+    <el-form
+      ref="dataForm"
+      :model="dataForm"
+      :rules="dataRule"
+      label-width="120px"
+      @keyup.enter.native="dataFormSubmit()"
+    >
       <el-form-item size="mini" label="存储类型">
         <el-radio-group v-model="dataForm.type">
           <el-radio :label="1">七牛</el-radio>
@@ -99,7 +105,9 @@ export default {
         url: '/sys/oss/config',
         method: 'get'
       }).then(({ data }) => {
-        this.dataForm = data && data.code === 0 ? data.config : []
+        if (data) {
+          this.dataForm = data
+        }
       })
     },
     // 表单提交
@@ -110,17 +118,15 @@ export default {
             url: '/sys/oss/saveConfig',
             method: 'post',
             data: this.dataForm
-          }).then(({ data }) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                }
-              })
-            }
+          }).then(({ msg }) => {
+            this.$message({
+              message: msg || '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.visible = false
+              }
+            })
           })
         }
       })

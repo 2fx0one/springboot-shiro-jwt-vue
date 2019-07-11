@@ -7,12 +7,13 @@
   >
     <el-upload
       drag
-      :action="url"
+      :action="'123'"
       :before-upload="beforeUploadHandle"
       :on-success="successHandle"
       multiple
       :file-list="fileList"
       style="text-align: center;"
+      :auto-upload="false"
     >
       <i class="el-icon-upload" />
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -22,7 +23,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+// import SingleImageUpload from '@/components/Upload/singleImage'
+// import SingleImageUpload2 from '@/components/Upload/singleImage2'
+// import SingleImageUpload3 from '@/components/Upload/singleImage3'
+
 export default {
+  // components: { SingleImageUpload3, SingleImageUpload2, SingleImageUpload },
   data() {
     return {
       visible: false,
@@ -32,9 +39,15 @@ export default {
       fileList: []
     }
   },
+  computed: {
+    ...mapGetters([
+      'token'
+    ])
+  },
   methods: {
     init(id) {
-      this.url = `/sys/oss/upload?token=${this.$cookie.get('token')}`
+      console.log(this.token)
+      this.url = `/sys/oss/upload?token=${this.token}`
       this.visible = true
     },
     // 上传之前

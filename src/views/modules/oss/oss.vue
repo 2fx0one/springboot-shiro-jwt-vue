@@ -1,5 +1,5 @@
 <template>
-  <div class="mod-oss">
+  <div class="app-container mod-oss">
     <el-form :inline="true" :model="dataForm">
       <el-form-item>
         <el-button type="primary" @click="configHandle()">云存储配置</el-button>
