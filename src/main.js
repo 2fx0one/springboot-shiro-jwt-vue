@@ -31,8 +31,11 @@ import { mockXHR } from '../mock'
 if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
-import permission from '@/directive/permission/permission'
-Vue.directive('permission', permission)
+import permission from '@/directive/permission'
+Vue.use(permission)
+
+import drag from '@/directive/el-drag-dialog'
+Vue.use(drag)
 
 import request from '@/utils/request'
 Vue.prototype.$http = request

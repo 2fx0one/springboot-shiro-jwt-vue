@@ -126,8 +126,8 @@ export default {
   },
   methods: {
     rowClick(row, column, cell, event) {
-      console.log('cell-click row ', row)
-      console.log('cell-click column ', column)
+      // console.log('cell-click row ', row)
+      // console.log('cell-click column ', column)
       // if (column.label === 'ID') {
       //   console.log('cell-click', row, column)
       // }
@@ -140,7 +140,7 @@ export default {
         method: 'get'
       }).then(({ data }) => {
         this.dataList = listToTree(data, 'menuId')
-        console.log(this.dataList)
+        // console.log(this.dataList)
         this.$nextTick(() => {
           this.dataListLoading = false
           this.$refs.menuTable.toggleRowExpansion({

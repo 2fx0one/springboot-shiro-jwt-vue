@@ -53,16 +53,17 @@ function menuToRouter(menu) {
   // console.log('menuToRouter', menu)
   if (menu.children) {
     return {
+      name: menu.url,
       path: menu.url,
       component: Layout,
       meta: { title: menu.name, icon: menu.icon },
       children: menu.children.map(menuToRouter)
     }
   } else {
-    // menu.url = menu.url.replace(/^\//, '')
-    console.log('component ', `@/views/modules/${menu.url}`)
+    const name = menu.url.replace('/', '-')
     return {
-      path: menu.url.replace('/', '-'),
+      name,
+      path: name,
       component: () => import(`@/views/modules/${menu.url}`),
       meta: { title: menu.name, icon: menu.icon, noCache: true }
     }
@@ -73,8 +74,8 @@ const actions = {
   generateRoutes({ commit }, userInfo) {
     return new Promise(resolve => {
       getMenuNav().then(({ data }) => {
-        console.log('getMenuNav userInfo', userInfo)
-        console.log('getMenuNav', data)
+        // console.log('getMenuNav userInfo', userInfo)
+        // console.log('getMenuNav', data)
 
         const accessedRoutes = data.menuList.map(menuToRouter)
         // console.log(accessedRoutes)
