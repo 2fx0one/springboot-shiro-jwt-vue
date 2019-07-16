@@ -49,15 +49,16 @@ const mutations = {
   }
 }
 
-function menuToRouter(menu) {
-  // console.log('menuToRouter', menu)
-  if (menu.children) {
+function menuToRouter(menu, level = 0) {
+  // console.log('menuToRouter menu = ', menu)
+  // console.log('menuToRouter level = ', level)
+  if (menu.children && menu.children.length > 0) {
     return {
       name: menu.url,
       path: menu.url,
-      component: Layout,
+      component: level === 0 ? Layout : menu.url,
       meta: { title: menu.name, icon: menu.icon },
-      children: menu.children.map(menuToRouter)
+      children: menu.children.map(e => { return menuToRouter(e, level + 1) }) // 递归获取
     }
   } else {
     const name = menu.url.replace('/', '-')
