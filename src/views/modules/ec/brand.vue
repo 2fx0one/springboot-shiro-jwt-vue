@@ -39,13 +39,13 @@
         prop="image"
         header-align="center"
         align="center"
-        label="品牌图片地址"
+        label="品牌图片"
       />
       <el-table-column
         prop="letter"
         header-align="center"
         align="center"
-        label="品牌的首字母"
+        label="品牌首字母"
       />
       <el-table-column
         fixed="right"

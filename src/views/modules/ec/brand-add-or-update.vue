@@ -8,11 +8,11 @@
       <el-form-item label="品牌名称" prop="name">
         <el-input v-model="dataForm.name" placeholder="品牌名称" />
       </el-form-item>
-      <el-form-item label="品牌图片地址" prop="image">
-        <el-input v-model="dataForm.image" placeholder="品牌图片地址" />
+      <el-form-item label="品牌图片" prop="image">
+        <el-input v-model="dataForm.image" placeholder="品牌图片" />
       </el-form-item>
-      <el-form-item label="品牌的首字母" prop="letter">
-        <el-input v-model="dataForm.letter" placeholder="品牌的首字母" />
+      <el-form-item label="首字母" prop="letter">
+        <el-input v-model="dataForm.letter" placeholder="首字母" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
