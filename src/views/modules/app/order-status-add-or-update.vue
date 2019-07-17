@@ -83,8 +83,7 @@ export default {
         if (this.dataForm.orderId) {
           this.$http({
             url: `/app/orderStatus/info/${this.dataForm.orderId}`,
-            method: 'get',
-            params: this.$http.adornParams()
+            method: 'get'
           }).then(({ data }) => {
             if (data) {
               this.dataForm.status = data.orderStatus.status

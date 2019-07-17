@@ -41,8 +41,7 @@ export default {
         if (this.dataForm.categoryId) {
           this.$http({
             url: `/app/categoryBrand/info/${this.dataForm.categoryId}`,
-            method: 'get',
-            params: this.$http.adornParams()
+            method: 'get'
           }).then(({ data }) => {
             if (data) {
               this.dataForm.brandId = data.categoryBrand.brandId

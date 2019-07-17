@@ -69,8 +69,7 @@ export default {
         if (this.dataForm.spuId) {
           this.$http({
             url: `/app/spuDetail/info/${this.dataForm.spuId}`,
-            method: 'get',
-            params: this.$http.adornParams()
+            method: 'get'
           }).then(({ data }) => {
             if (data) {
               this.dataForm.description = data.spuDetail.description

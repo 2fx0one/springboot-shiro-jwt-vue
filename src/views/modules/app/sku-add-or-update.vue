@@ -97,8 +97,7 @@ export default {
         if (this.dataForm.id) {
           this.$http({
             url: `/app/sku/info/${this.dataForm.id}`,
-            method: 'get',
-            params: this.$http.adornParams()
+            method: 'get'
           }).then(({ data }) => {
             if (data) {
               this.dataForm.spuId = data.sku.spuId

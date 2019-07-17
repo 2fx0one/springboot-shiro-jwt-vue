@@ -55,8 +55,7 @@ export default {
         if (this.dataForm.skuId) {
           this.$http({
             url: `/app/stock/info/${this.dataForm.skuId}`,
-            method: 'get',
-            params: this.$http.adornParams()
+            method: 'get'
           }).then(({ data }) => {
             if (data) {
               this.dataForm.secondKillStock = data.stock.secondKillStock

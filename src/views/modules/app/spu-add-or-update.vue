@@ -104,8 +104,7 @@ export default {
         if (this.dataForm.id) {
           this.$http({
             url: `/app/spu/info/${this.dataForm.id}`,
-            method: 'get',
-            params: this.$http.adornParams()
+            method: 'get'
           }).then(({ data }) => {
             if (data) {
               this.dataForm.title = data.spu.title

@@ -55,8 +55,7 @@ export default {
         if (this.dataForm.id) {
           this.$http({
             url: `/app/brand/info/${this.dataForm.id}`,
-            method: 'get',
-            params: this.$http.adornParams()
+            method: 'get'
           }).then(({ data }) => {
             if (data) {
               this.dataForm.name = data.brand.name
