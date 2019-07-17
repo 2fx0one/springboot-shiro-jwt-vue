@@ -54,6 +54,7 @@ function menuToRouter(menu, level = 0) {
   // console.log('menuToRouter level = ', level)
   if (menu.children && menu.children.length > 0) {
     return {
+      level,
       name: menu.url,
       path: menu.url,
       component: level === 0 ? Layout : menu.url,
@@ -63,6 +64,7 @@ function menuToRouter(menu, level = 0) {
   } else {
     const name = menu.url.replace('/', '-')
     return {
+      level,
       name,
       path: name,
       component: () => import(`@/views/modules/${menu.url}`),
@@ -78,8 +80,8 @@ const actions = {
         // console.log('getMenuNav userInfo', userInfo)
         // console.log('getMenuNav', data)
 
-        const accessedRoutes = data.menuList.map(menuToRouter)
-        // console.log(accessedRoutes)
+        const accessedRoutes = data.menuList.map(x => menuToRouter(x, 0))
+        console.log(accessedRoutes)
         // if (userInfo.name === 'admin') {
         //   accessedRoutes = asyncRoutes || []
         // } else {

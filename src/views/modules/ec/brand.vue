@@ -1,13 +1,13 @@
 <template>
-  <div class="app-container mod-app-categoryBrand">
+  <div class="app-container mod-ec-brand">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-input v-model="dataForm.key" placeholder="参数名" clearable />
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-permission="'app:categoryBrand:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-permission="'app:categoryBrand:delete'" type="danger" :disabled="dataListSelections.length <= 0" @click="deleteHandle()">批量删除</el-button>
+        <el-button v-permission="'ec:brand:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-permission="'ec:brand:delete'" type="danger" :disabled="dataListSelections.length <= 0" @click="deleteHandle()">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -24,16 +24,28 @@
         width="50"
       />
       <el-table-column
-        prop="categoryId"
-        header-align="center"
-        align="center"
-        label="商品类目id"
-      />
-      <el-table-column
-        prop="brandId"
+        prop="id"
         header-align="center"
         align="center"
         label="品牌id"
+      />
+      <el-table-column
+        prop="name"
+        header-align="center"
+        align="center"
+        label="品牌名称"
+      />
+      <el-table-column
+        prop="image"
+        header-align="center"
+        align="center"
+        label="品牌图片地址"
+      />
+      <el-table-column
+        prop="letter"
+        header-align="center"
+        align="center"
+        label="品牌的首字母"
       />
       <el-table-column
         fixed="right"
@@ -43,8 +55,8 @@
         label="操作"
       >
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.categoryId)">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.categoryId)">删除</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -63,7 +75,7 @@
 </template>
 
 <script>
-import AddOrUpdate from './category-brand-add-or-update'
+import AddOrUpdate from './brand-add-or-update'
 export default {
   components: {
     AddOrUpdate
@@ -90,7 +102,7 @@ export default {
     getDataList() {
       this.dataListLoading = true
       this.$http({
-        url: `/app/categoryBrand/list`,
+        url: `/ec/brand/list`,
         method: 'get',
         params: {
           'page': this.pageIndex,
@@ -133,7 +145,7 @@ export default {
     // 删除
     deleteHandle(id) {
       var ids = id ? [id] : this.dataListSelections.map(item => {
-        return item.categoryId
+        return item.id
       })
       this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
@@ -141,7 +153,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: `/app/categoryBrand/delete`,
+          url: `/ec/brand/delete`,
           method: 'post',
           data: ids
         }).then(({ msg }) => {

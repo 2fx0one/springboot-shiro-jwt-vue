@@ -1,13 +1,13 @@
 <template>
-  <div class="app-container mod-app-category">
+  <div class="app-container mod-ec-category">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-input v-model="dataForm.key" placeholder="参数名" clearable />
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-permission="'app:category:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-permission="'app:category:delete'" type="danger" :disabled="dataListSelections.length <= 0" @click="deleteHandle()">批量删除</el-button>
+        <el-button v-permission="'ec:category:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-permission="'ec:category:delete'" type="danger" :disabled="dataListSelections.length <= 0" @click="deleteHandle()">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -108,7 +108,7 @@ export default {
     getDataList() {
       this.dataListLoading = true
       this.$http({
-        url: `/app/category/list`,
+        url: `/ec/category/list`,
         method: 'get',
         params: {
           'page': this.pageIndex,
@@ -159,7 +159,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: `/app/category/delete`,
+          url: `/ec/category/delete`,
           method: 'post',
           data: ids
         }).then(({ msg }) => {

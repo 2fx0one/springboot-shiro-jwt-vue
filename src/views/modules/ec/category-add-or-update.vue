@@ -61,7 +61,7 @@ export default {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
           this.$http({
-            url: `/app/category/info/${this.dataForm.id}`,
+            url: `/ec/category/info/${this.dataForm.id}`,
             method: 'get'
           }).then(({ data }) => {
             if (data) {
@@ -79,7 +79,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$http({
-            url: `/app/category/${!this.dataForm.id ? 'save' : 'update'}`,
+            url: `/ec/category/${!this.dataForm.id ? 'save' : 'update'}`,
             method: 'post',
             data: {
               'id': this.dataForm.id || undefined,
