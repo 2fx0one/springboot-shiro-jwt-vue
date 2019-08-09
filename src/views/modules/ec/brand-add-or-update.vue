@@ -58,9 +58,9 @@ export default {
             method: 'get'
           }).then(({ data }) => {
             if (data) {
-              this.dataForm.name = data.brand.name
-              this.dataForm.image = data.brand.image
-              this.dataForm.letter = data.brand.letter
+              this.dataForm.name = data.name
+              this.dataForm.image = data.image
+              this.dataForm.letter = data.letter
             }
           })
         }

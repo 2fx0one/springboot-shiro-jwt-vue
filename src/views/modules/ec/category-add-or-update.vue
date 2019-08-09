@@ -65,10 +65,10 @@ export default {
             method: 'get'
           }).then(({ data }) => {
             if (data) {
-              this.dataForm.name = data.category.name
-              this.dataForm.parentId = data.category.parentId
-              this.dataForm.isParent = data.category.isParent
-              this.dataForm.sort = data.category.sort
+              this.dataForm.name = data.name
+              this.dataForm.parentId = data.parentId
+              this.dataForm.isParent = data.isParent
+              this.dataForm.sort = data.sort
             }
           })
         }
