@@ -39,13 +39,13 @@
         prop="image"
         header-align="center"
         align="center"
-        label="品牌图片"
+        label="品牌图片地址"
       />
       <el-table-column
         prop="letter"
         header-align="center"
         align="center"
-        label="品牌首字母"
+        label="品牌的首字母"
       />
       <el-table-column
         fixed="right"
@@ -70,15 +70,16 @@
       @current-change="currentChangeHandle"
     />
     <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList" />
+    <brand-add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList" />
   </div>
 </template>
 
 <script>
-import AddOrUpdate from './brand-add-or-update'
+import BrandAddOrUpdate from './brand-add-or-update'
+import { getBrandList, delBrand } from '@/api/ec/brand'
 export default {
   components: {
-    AddOrUpdate
+    BrandAddOrUpdate
   },
   data() {
     return {
@@ -86,9 +87,11 @@ export default {
         key: ''
       },
       dataList: [],
-      pageIndex: 1,
-      pageSize: 10,
-      totalPage: 0,
+      page: {
+        index: 1,
+        size: 10,
+        total: 0
+      },
       dataListLoading: false,
       dataListSelections: [],
       addOrUpdateVisible: false
@@ -101,34 +104,30 @@ export default {
     // 获取数据列表
     getDataList() {
       this.dataListLoading = true
-      this.$http({
-        url: `/ec/brand/list`,
-        method: 'get',
-        params: {
-          'page': this.pageIndex,
-          'limit': this.pageSize,
-          'key': this.dataForm.key
-        }
+      getBrandList({
+        'page': this.page.index,
+        'limit': this.page.size,
+        'key': this.dataForm.key
       }).then(({ data }) => {
         if (data) {
           this.dataList = data.list
-          this.totalPage = data.total
+          this.page.total = data.total
         } else {
           this.dataList = []
-          this.totalPage = 0
+          this.page.total = 0
         }
         this.dataListLoading = false
       })
     },
     // 每页数
     sizeChangeHandle(val) {
-      this.pageSize = val
-      this.pageIndex = 1
+      this.page.size = val
+      this.page.index = 1
       this.getDataList()
     },
     // 当前页
     currentChangeHandle(val) {
-      this.pageIndex = val
+      this.page.index = val
       this.getDataList()
     },
     // 多选
@@ -144,19 +143,13 @@ export default {
     },
     // 删除
     deleteHandle(id) {
-      var ids = id ? [id] : this.dataListSelections.map(item => {
-        return item.id
-      })
+      const ids = id ? [id] : this.dataListSelections.map(item => item.id)
       this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$http({
-          url: `/ec/brand/delete`,
-          method: 'post',
-          data: ids
-        }).then(({ msg }) => {
+        delBrand(ids).then(({ msg }) => {
           this.$message({
             message: msg || '操作成功',
             type: 'success',

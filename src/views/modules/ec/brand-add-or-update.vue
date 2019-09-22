@@ -8,11 +8,11 @@
       <el-form-item label="品牌名称" prop="name">
         <el-input v-model="dataForm.name" placeholder="品牌名称" />
       </el-form-item>
-      <el-form-item label="品牌图片" prop="image">
-        <el-input v-model="dataForm.image" placeholder="品牌图片" />
+      <el-form-item label="品牌图片地址" prop="image">
+        <el-input v-model="dataForm.image" placeholder="品牌图片地址" />
       </el-form-item>
-      <el-form-item label="首字母" prop="letter">
-        <el-input v-model="dataForm.letter" placeholder="首字母" />
+      <el-form-item label="品牌的首字母" prop="letter">
+        <el-input v-model="dataForm.letter" placeholder="品牌的首字母" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { getBrandInfo, saveBrand, updateBrand } from '@/api/ec/brand'
 export default {
   data() {
     return {
@@ -53,32 +54,28 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
-          this.$http({
-            url: `/ec/brand/info/${this.dataForm.id}`,
-            method: 'get'
-          }).then(({ data }) => {
+          getBrandInfo(this.dataForm.id).then(({ data }) => {
             if (data) {
-              this.dataForm.name = data.brand.name
-              this.dataForm.image = data.brand.image
-              this.dataForm.letter = data.brand.letter
+              this.dataForm.name = data.name
+              this.dataForm.image = data.image
+              this.dataForm.letter = data.letter
             }
           })
         }
       })
     },
+    saveOrUpdate(data) {
+      return !this.dataForm.id ? saveBrand(data) : updateBrand(data)
+    },
     // 表单提交
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$http({
-            url: `/ec/brand/${!this.dataForm.id ? 'save' : 'update'}`,
-            method: 'post',
-            data: {
-              'id': this.dataForm.id || undefined,
-              'name': this.dataForm.name,
-              'image': this.dataForm.image,
-              'letter': this.dataForm.letter
-            }
+          this.saveOrUpdate({
+            'id': this.dataForm.id || undefined,
+            'name': this.dataForm.name,
+            'image': this.dataForm.image,
+            'letter': this.dataForm.letter
           }).then(({ msg }) => {
             this.$message({
               message: '操作成功',

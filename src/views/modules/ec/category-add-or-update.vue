@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { getCategoryInfo, saveCategory, updateCategory } from '@/api/ec/category'
 export default {
   data() {
     return {
@@ -60,34 +61,30 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
-          this.$http({
-            url: `/ec/category/info/${this.dataForm.id}`,
-            method: 'get'
-          }).then(({ data }) => {
+          getCategoryInfo(this.dataForm.id).then(({ data }) => {
             if (data) {
-              this.dataForm.name = data.category.name
-              this.dataForm.parentId = data.category.parentId
-              this.dataForm.isParent = data.category.isParent
-              this.dataForm.sort = data.category.sort
+              this.dataForm.name = data.name
+              this.dataForm.parentId = data.parentId
+              this.dataForm.isParent = data.isParent
+              this.dataForm.sort = data.sort
             }
           })
         }
       })
     },
+    saveOrUpdate(data) {
+      return !this.dataForm.id ? saveCategory(data) : updateCategory(data)
+    },
     // 表单提交
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$http({
-            url: `/ec/category/${!this.dataForm.id ? 'save' : 'update'}`,
-            method: 'post',
-            data: {
-              'id': this.dataForm.id || undefined,
-              'name': this.dataForm.name,
-              'parentId': this.dataForm.parentId,
-              'isParent': this.dataForm.isParent,
-              'sort': this.dataForm.sort
-            }
+          this.saveOrUpdate({
+            'id': this.dataForm.id || undefined,
+            'name': this.dataForm.name,
+            'parentId': this.dataForm.parentId,
+            'isParent': this.dataForm.isParent,
+            'sort': this.dataForm.sort
           }).then(({ msg }) => {
             this.$message({
               message: '操作成功',
