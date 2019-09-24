@@ -55,9 +55,10 @@ export default {
             method: 'get'
           }).then(({ data }) => {
             if (data) {
-              this.dataForm.paramKey = data.config.paramKey
-              this.dataForm.paramValue = data.config.paramValue
-              this.dataForm.remark = data.config.remark
+              console.log(data)
+              this.dataForm.paramKey = data.paramKey
+              this.dataForm.paramValue = data.paramValue
+              this.dataForm.remark = data.remark
             }
           })
         }
