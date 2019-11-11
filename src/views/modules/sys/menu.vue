@@ -58,12 +58,20 @@
         label="排序号"
       />
       <el-table-column
-        prop="url"
+        prop="path"
         header-align="center"
         align="center"
         width="150"
         :show-overflow-tooltip="true"
-        label="菜单URL"
+        label="菜单Path"
+      />
+      <el-table-column
+        prop="component"
+        header-align="center"
+        align="center"
+        width="150"
+        :show-overflow-tooltip="true"
+        label="组件"
       />
       <el-table-column
         prop="perms"

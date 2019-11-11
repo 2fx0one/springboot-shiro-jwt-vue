@@ -52,25 +52,28 @@ const mutations = {
 function menuToRouter(menu, level = 0) {
   // console.log('menuToRouter menu = ', menu)
   // console.log('menuToRouter level = ', level)
-  if (menu.children && menu.children.length > 0) {
-    return {
-      level,
-      name: menu.url,
-      path: menu.url,
-      component: level === 0 ? Layout : menu.url,
-      meta: { title: menu.name, icon: menu.icon },
-      children: menu.children.map(e => { return menuToRouter(e, level + 1) }) // 递归获取
-    }
-  } else {
-    const name = menu.url.replace('/', '-')
-    return {
-      level,
-      name,
-      path: name,
-      component: () => import(`@/views/modules/${menu.url}`),
-      meta: { title: menu.name, icon: menu.icon, noCache: true }
-    }
+  // if (menu.children && menu.children.length > 0) {
+  return {
+    level,
+    name: menu.path,
+    path: menu.path,
+    // component: menu.component,
+    component: menu.component === 'Layout' ? Layout : () => import(`@/views/modules/${menu.component}`),
+    meta: { title: menu.name, icon: menu.icon },
+    children: menu.children && menu.children.length > 0 ? menu.children.map(e => {
+      return menuToRouter(e, level + 1)
+    }) : [] // 递归获取
   }
+  // } else {
+  // const name = menu.url.replace('/', '-')
+  //   return {
+  //     level,
+  //     name: menu.name,
+  //     path: menu.path,
+  //     component: menu.component === 'Layout' ? Layout : () => import(`@/views/modules/${menu.component}`),
+  //     meta: { title: menu.name, icon: menu.icon, noCache: true }
+  //   }
+  // }
 }
 
 const actions = {
