@@ -38,7 +38,8 @@ module.exports = {
         target: url,
         pathRewrite: {
           '^/api': ''
-        }
+        },
+        ws: false
       }
     }
     // proxy: {

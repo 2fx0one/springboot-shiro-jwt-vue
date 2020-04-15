@@ -37,9 +37,17 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(({ data }) => {
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+      login({
+        username: username.trim(),
+        password: password,
+        grant_type: 'password',
+        scope: 'server',
+        client_id: 'app',
+        client_secret: 'app'
+      }).then((data) => {
+        console.log('xxxxx', data)
+        commit('SET_TOKEN', data.access_token)
+        setToken(data.access_token)
         resolve()
       }).catch(error => {
         reject(error)
