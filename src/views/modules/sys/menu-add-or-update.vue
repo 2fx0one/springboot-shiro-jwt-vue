@@ -32,8 +32,11 @@
         </el-popover>
         <el-input v-model="dataForm.parentName" v-popover:menuListPopover :readonly="true" placeholder="点击选择上级菜单" class="menu-list__input" />
       </el-form-item>
-      <el-form-item v-if="dataForm.type === 1" label="菜单路由：" prop="url">
-        <el-input v-model="dataForm.url" placeholder="菜单路由" />
+      <el-form-item v-if="dataForm.type === 1" label="菜单路由：" prop="path">
+        <el-input v-model="dataForm.path" placeholder="菜单路由" />
+      </el-form-item>
+      <el-form-item v-if="dataForm.type === 1" label="菜单组件：" prop="component">
+        <el-input v-model="dataForm.component" placeholder="菜单组件" />
       </el-form-item>
       <el-form-item v-if="dataForm.type !== 0" label="授权标识：" prop="perms">
         <el-input v-model="dataForm.perms" placeholder="多个用逗号分隔, 如: user:list,user:create" />
@@ -103,7 +106,8 @@ export default {
         name: '',
         parentId: 0,
         parentName: '',
-        url: '',
+        path: '',
+        component: '',
         perms: '',
         orderNum: 0,
         icon: '',
@@ -158,7 +162,8 @@ export default {
             this.dataForm.type = data.type
             this.dataForm.name = data.name
             this.dataForm.parentId = data.parentId
-            this.dataForm.url = data.url
+            this.dataForm.path = data.path
+            this.dataForm.component = data.component
             this.dataForm.perms = data.perms
             this.dataForm.orderNum = data.orderNum
             this.dataForm.icon = data.icon
@@ -193,7 +198,8 @@ export default {
               'type': this.dataForm.type,
               'name': this.dataForm.name,
               'parentId': this.dataForm.parentId,
-              'url': this.dataForm.url,
+              'path': this.dataForm.path,
+              'component': this.dataForm.component,
               'perms': this.dataForm.perms,
               'orderNum': this.dataForm.orderNum,
               'icon': this.dataForm.icon
