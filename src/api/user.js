@@ -3,9 +3,9 @@ import request from '@/utils/request'
 export function login(data) {
   return request({
     // url: `/oauth/token?username=${data.username}&password=${data.password}&grant_type=${data.grant_type}&scope=${data.scope}&client_id=${data.client_id}&client_secret=${data.client_secret}`,
-    url: `/oauth/token`,
-    method: 'get',
-    params: data
+    url: `/sys/login`,
+    method: 'post',
+    data
   })
 }
 

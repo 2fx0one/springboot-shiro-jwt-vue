@@ -44,10 +44,10 @@ const actions = {
         scope: 'server',
         client_id: 'app',
         client_secret: 'app'
-      }).then((data) => {
+      }).then(({ data }) => {
         console.log('xxxxx', data)
-        commit('SET_TOKEN', data.access_token)
-        setToken(data.access_token)
+        commit('SET_TOKEN', data.token)
+        setToken(data.token)
         resolve()
       }).catch(error => {
         reject(error)
